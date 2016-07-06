@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BallanceOnlineClient", "BallanceOnlineClient\BallanceOnlineClient.csproj", "{D5427F30-AADB-473F-ABCD-807C2B21289C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BallanceOnlineServer", "BallanceOnlineServer\BallanceOnlineServer.csproj", "{BA401C51-399D-4DDF-BD7D-6D0D3C63BE7C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BallanceOnline", "BallanceOnline\BallanceOnline.csproj", "{66CFBD2C-695A-4F57-B301-ABA19586E73E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D5427F30-AADB-473F-ABCD-807C2B21289C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5427F30-AADB-473F-ABCD-807C2B21289C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5427F30-AADB-473F-ABCD-807C2B21289C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5427F30-AADB-473F-ABCD-807C2B21289C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA401C51-399D-4DDF-BD7D-6D0D3C63BE7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA401C51-399D-4DDF-BD7D-6D0D3C63BE7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA401C51-399D-4DDF-BD7D-6D0D3C63BE7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA401C51-399D-4DDF-BD7D-6D0D3C63BE7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66CFBD2C-695A-4F57-B301-ABA19586E73E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66CFBD2C-695A-4F57-B301-ABA19586E73E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66CFBD2C-695A-4F57-B301-ABA19586E73E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66CFBD2C-695A-4F57-B301-ABA19586E73E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
