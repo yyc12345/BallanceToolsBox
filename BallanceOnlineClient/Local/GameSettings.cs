@@ -15,10 +15,13 @@ namespace BallanceOnlineClient.Local {
 
         public string BGMName;
 
+        public bool FullScreen;
+
         public GameSettings() {
             ModList = new List<string>();
             backgroundName = "";
             BGMName = "";
+            FullScreen = false;
         }
 
         /// <summary>
@@ -27,11 +30,12 @@ namespace BallanceOnlineClient.Local {
         public void Update() {
             var comd = Environment.GetCommandLineArgs();
 
-            /*第一项是程序排除
+            /*第一项是程序->排除不要
              * 第2项是ballance目录
              * 第3项是mod列表，使用,分割
              * 第4项是背景名称
              * 第5项是bgm名称
+             * 第6项是否全屏
              * */
 
             ModList.Clear();
@@ -42,6 +46,8 @@ namespace BallanceOnlineClient.Local {
 
             backgroundName = comd[3];
             BGMName = comd[4];
+
+            FullScreen = Convert.ToBoolean(comd[5]);
 
         }
 

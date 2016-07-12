@@ -131,4 +131,35 @@ namespace BallanceOnlineClient.Local {
         }
     }
 
+    public class HookMouseAndKeyboard {
+
+        Process selectedProcess;
+
+        public HookMouseAndKeyboard() {
+
+            foreach (Process p in Process.GetProcesses()) {
+                if (p.ProcessName == "Player") { selectedProcess = p; }
+            }
+
+            if (selectedProcess == null) {
+                throw new NotImplementedException("Couldn't find process!");
+            }
+
+        }
+
+        /// <summary>
+        /// 开始封锁
+        /// </summary>
+        public void Start() {
+            Win32.EnableWindow(selectedProcess.Handle, false);
+        }
+
+        /// <summary>
+        /// 解除封锁
+        /// </summary>
+        public void Stop() {
+            Win32.EnableWindow(selectedProcess.Handle, true);
+        }
+    }
+
 }
