@@ -4,9 +4,141 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BallanceOnlineClient"
-        mc:Ignorable="d"
-        Title="GameResult" Height="300" Width="300">
+        mc:Ignorable="d" Topmost="true" ShowInTaskbar="False"
+        Title="GameResult" Height="400" Width="500" AllowsTransparency="True" WindowStyle="None" Background="#50000000">
     <Grid>
         
+        <Grid VerticalAlignment="Top" Margin="0,20,0,0" Height="50" HorizontalAlignment="Center" Background="#50000000">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="60"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.RowSpan="2" Margin="0,0,10,0">
+                <Grid.Background>
+                    <ImageBrush ImageSource="mapIcon.png"/>
+                </Grid.Background>
+            </Grid>
+
+            <TextBlock x:Name="uiGameMapName" Foreground="White" FontSize="15" Grid.Column="1" Text="" VerticalAlignment="Center"/>
+
+            <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1">
+                <TextBlock Foreground="White" FontSize="12" Grid.Column="1" Text="游戏规则：" VerticalAlignment="Center"/>
+                <TextBlock x:Name="uiGameRule" Foreground="White" FontSize="12" Grid.Column="1" Text="" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                <TextBlock Foreground="White" FontSize="12" Grid.Column="1" Text="游戏模式：" VerticalAlignment="Center"/>
+                <TextBlock x:Name="uiGameMode" Foreground="White" FontSize="12" Grid.Column="1" Text="" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            </StackPanel>
+        </Grid>
+
+        <Grid Margin="50,100,50,50">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <ListBox x:Name="uiTeamAList" Margin="0,5,0,0" Grid.Column="0" Grid.Row="2" Background="#00000000" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel IsItemsHost="True" />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate >
+                        <Grid Width="100">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="2*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Rectangle Stroke="White" Grid.RowSpan="2" Margin="1">
+                                <Rectangle.Effect >
+                                    <BlurEffect RenderingBias="Quality"/>
+                                </Rectangle.Effect>
+                                <Rectangle.Fill>
+                                    <ImageBrush ImageSource="mapIcon.png"/>
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <Ellipse Height="15" Width="15" Stroke="White" Fill="{Binding readyColor}" Margin="0,0,0,5" HorizontalAlignment="Center"/>
+                                <TextBlock Foreground="White" Grid.Row="0" FontSize="15" Text="{Binding name}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </StackPanel>
+
+                            <TextBlock TextWrapping="Wrap" Grid.Row="1" Foreground="White" FontSize="9" Text="{Binding duty}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <ListBox x:Name="uiTeamBList" Margin="0,5,0,0" Grid.Column="2" Grid.Row="2" Background="#00000000" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel IsItemsHost="True" />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate >
+                        <Grid Width="100">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="2*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Rectangle Stroke="White" Grid.RowSpan="2" Margin="1">
+                                <Rectangle.Effect >
+                                    <BlurEffect RenderingBias="Quality"/>
+                                </Rectangle.Effect>
+                                <Rectangle.Fill>
+                                    <ImageBrush ImageSource="mapIcon.png"/>
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <Ellipse Height="15" Width="15" Stroke="White" Fill="{Binding readyColor}" Margin="0,0,0,5" HorizontalAlignment="Center"/>
+                                <TextBlock Foreground="White" Grid.Row="0" FontSize="15" Text="{Binding name}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </StackPanel>
+
+                            <TextBlock TextWrapping="Wrap" Grid.Row="1" Foreground="White" FontSize="9" Text="{Binding duty}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <TextBlock x:Name="uiTeamAName" Foreground="White" FontSize="15" Grid.Row="0" Grid.Column="0" Text="" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Margin="0,5,0,0" HorizontalAlignment="Center">
+                <TextBlock Foreground="White" FontSize="12" Grid.Row="0" Grid.Column="0" Text="成绩：" VerticalAlignment="Center"/>
+                <TextBlock x:Name="uiTeamAMark" Foreground="White" FontSize="12" Grid.Row="0" Grid.Column="0" Text="" VerticalAlignment="Center"/>
+
+                <TextBlock Foreground="White" FontSize="12" Grid.Row="0" Grid.Column="0" Text="PP：" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                <TextBlock x:Name="uiTeamAPP" Foreground="White" FontSize="12" Grid.Row="0" Grid.Column="0" Text="" VerticalAlignment="Center"/>
+            </StackPanel>
+            <TextBlock x:Name="uiTeamBName" Foreground="White" FontSize="15" Grid.Row="0" Grid.Column="2" Text="" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2" Margin="0,5,0,0" HorizontalAlignment="Center">
+                <TextBlock Foreground="White" FontSize="12" Grid.Row="0" Grid.Column="0" Text="成绩：" VerticalAlignment="Center"/>
+                <TextBlock x:Name="uiTeamBMark" Foreground="White" FontSize="12" Grid.Row="0" Grid.Column="0" Text="" VerticalAlignment="Center"/>
+
+                <TextBlock Foreground="White" FontSize="12" Grid.Row="0" Grid.Column="0" Text="PP：" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                <TextBlock x:Name="uiTeamBPP" Foreground="White" FontSize="12" Grid.Row="0" Grid.Column="0" Text="" VerticalAlignment="Center"/>
+            </StackPanel>
+            
+            <TextBlock Foreground="White" FontSize="20" Grid.RowSpan="2" Grid.Column="1" Text="VS" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0,5,0">
+                <TextBlock.Effect>
+                    <DropShadowEffect Direction="270" Color="#7FFFFF00" RenderingBias="Quality" ShadowDepth="0" BlurRadius="10"/>
+                </TextBlock.Effect>
+            </TextBlock>
+
+        </Grid>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,10">
+            <Button Width="100" Content="再来一局" FontSize="15" Margin="0,0,10,0"/>
+            <Button Width="100" Content="就此退出" FontSize="15"/>
+        </StackPanel>
+
     </Grid>
 </Window>

@@ -78,7 +78,7 @@ namespace BallanceOnline.Const {
 
         /// <summary>
         /// 服务器使用
-        /// 返回所有玩家，除了自己。数据区格式：SG 分隔符,
+        /// 返回所有玩家包括自己。数据区格式：SG 分隔符,
         /// 分隔符分割玩家IP
         /// 客户端不使用
         /// </summary>
@@ -119,32 +119,51 @@ namespace BallanceOnline.Const {
         /// [SG mod列表 分隔符#,背景名,bgm名,玩家名]
         /// </summary>
         public const string InformationTurnIn = "ITI";
-        /// <summary>
-        /// 服务器使用
-        /// 分发用户数据。数据区格式：SG 分隔符,
-        /// [SG mod列表 分隔符#,背景名,bgm名,玩家名]
-        /// 客户端不使用
-        /// </summary>
-        public const string InformationGiveOut = "IGO";
+        ///// <summary>
+        ///// 服务器使用
+        ///// 分发用户数据。数据区格式：SG 分隔符,
+        ///// [SG mod列表 分隔符#,背景名,bgm名,玩家名]
+        ///// 客户端不使用
+        ///// </summary>
+        //public const string InformationGiveOut = "IGO";
 
         /// <summary>
         /// 服务器使用
         /// 给玩家指派任务。数据区格式：SG 分隔符,
-        /// [玩家名,地图名称,地图md5,比赛计分方式,比赛模式,SG 此玩家负责的小节 分隔符#,所属组别]
+        /// [0 玩家名,1 地图名称,2 地图md5,3 比赛计分方式,4 比赛模式,5 SG 此玩家负责的小节 分隔符#,6 所属组别,7 SG mod列表 分隔符#,8 背景名,9 bgm名]
         /// 客户端不使用
         /// </summary>
         public const string PlayerTask = "PT";
-
         /// <summary>
-        /// 服务器不使用
+        /// 服务器使用
+        /// 标明某个用户做好了准备。数据区格式：string 用户名
         /// 客户端使用
-        /// 表明玩家准备完毕。无数据区
+        /// 标明该用户准备就绪。无数据区
         /// </summary>
-        public const string ReplyReady = "RR";
+        public const string PlayerIsReady = "PIR";
 
         /// <summary>
         /// 服务器使用
-        /// 要求每个人进入3秒倒计时，准备开始游戏。无数据区
+        /// 让玩家准备接受地图文件。无数据区
+        /// 客户端不使用
+        /// </summary>
+        public const string StartDownloadingMap = "SDM";
+        /// <summary>
+        /// 服务器使用
+        /// 让玩家接受地图文件的一部分。数据区格式：byte[]
+        /// 客户端不使用
+        /// </summary>
+        public const string DownloadingMapData = "DMD";
+        /// <summary>
+        /// 服务器使用
+        /// 让玩家结束接受地图文件。无数据区
+        /// 客户端不使用
+        /// </summary>
+        public const string EndDownloadingMap = "EDM";
+
+        /// <summary>
+        /// 服务器使用
+        /// 要求每个人进入10秒倒计时，准备开始游戏。无数据区
         /// 客户端不使用
         /// </summary>
         public const string ReadyPlay = "RP";
@@ -184,6 +203,18 @@ namespace BallanceOnline.Const {
         /// 客户端不使用
         /// </summary>
         public const string TeamDied = "TD";
+        /// <summary>
+        /// 服务器使用
+        /// 广播某人暂停。数据区格式：string 暂停玩家名
+        /// 客户端不使用
+        /// </summary>
+        public const string PlayerPaused = "PP";
+        /// <summary>
+        /// 服务器使用
+        /// 广播某人完成。数据区格式：string 完成玩家名
+        /// 客户端不使用
+        /// </summary>
+        public const string PlayerSuccess = "PS";
 
         /// <summary>
         /// 服务器使用

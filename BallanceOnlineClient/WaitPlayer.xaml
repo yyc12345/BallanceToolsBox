@@ -4,9 +4,52 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BallanceOnlineClient"
-        mc:Ignorable="d"
-        Title="WaitPlayer" Height="300" Width="300">
+        mc:Ignorable="d" Topmost="true" ShowInTaskbar="False"
+        Title="WaitPlayer" Height="400" Width="400" AllowsTransparency="True" WindowStyle="None" Background="#50000000">
     <Grid>
-        
+
+        <TextBlock Text="等待其余玩家就绪" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,50,0,0" TextWrapping="Wrap" Foreground="White" FontSize="25"/>
+
+        <ListBox x:Name="uiPlayerList" VerticalAlignment="Top" Margin="100,100,100,100" Height="200" Background="#00000000" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel IsItemsHost="True" Orientation="Vertical" />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+                <DataTemplate >
+                    <Grid Height="30">
+                        <Rectangle Stroke="White" Fill="#50000000" Margin="1"/>
+                        <TextBlock Foreground="White" FontSize="15" Text="{Binding word}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <StackPanel Orientation="Vertical" VerticalAlignment="Bottom">
+            <ListBox x:Name="uiTalkList" Height="80" Background="#50000000" BorderThickness="0" Foreground="White" FontSize="12" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel IsItemsHost="True" Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate >
+                        <Grid Height="23">
+                            <TextBlock Foreground="White" FontSize="15" Text="{Binding word}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <Grid VerticalAlignment="Bottom">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="uiMsg" Background="#a0000000" BorderThickness="0" Foreground="White" FontSize="15" TextAlignment="Center"/>
+            <Button Grid.Column="1" x:Name="uiConnect" Content="  发送  " Width="{Binding Path=ActualWidth,ElementName=uiInputContainer}" FontSize="15" Click="uiConnect_Click"/>
+        </Grid>
+        </StackPanel>
+
     </Grid>
 </Window>

@@ -56,6 +56,22 @@ namespace BallanceOnline {
         /// <param name="value">字符</param>
         /// <param name="splitValue">分割字符</param>
         public StringGroup(ArrayList value, string splitValue) {
+            foreach (object a in value) {
+                string cache = a.ToString();
+                if (_sourceString == "") { _sourceString = cache; } else {
+                    _sourceString += splitValue;
+                    _sourceString += cache;
+                }
+            }
+            _SplitString = splitValue;
+        }
+
+        /// <summary>
+        /// 以list初始化
+        /// </summary>
+        /// <param name="value">字符</param>
+        /// <param name="splitValue">分割字符</param>
+        public StringGroup(List<string> value, string splitValue) {
             foreach (string a in value) {
                 if (_sourceString == "") { _sourceString = a; } else {
                     _sourceString += splitValue;
@@ -64,6 +80,7 @@ namespace BallanceOnline {
             }
             _SplitString = splitValue;
         }
+
 
         ///// <summary>
         ///// 以bigarraylist初始化
@@ -109,6 +126,22 @@ namespace BallanceOnline {
             if (_sourceString == "") { return null; }
 
             ArrayList sendOut = new ArrayList();
+            string[] sp = Regex.Split(_sourceString, _SplitString, RegexOptions.IgnoreCase);
+            foreach (string a in sp) {
+                sendOut.Add(a);
+            }
+
+            return sendOut;
+        }
+
+        /// <summary>
+        /// 输出到arraylist
+        /// </summary>
+        /// <returns></returns>
+        public List<string> ToList() {
+            if (_sourceString == "") { return null; }
+
+            List<string> sendOut = new List<string>();
             string[] sp = Regex.Split(_sourceString, _SplitString, RegexOptions.IgnoreCase);
             foreach (string a in sp) {
                 sendOut.Add(a);

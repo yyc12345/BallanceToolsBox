@@ -23,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -40,9 +41,11 @@
     <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BallanceOnline">
+    <Reference Include="BallanceOnline, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\BallanceOnline\bin\Release\BallanceOnline.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Forms" />
@@ -64,12 +67,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="GlobalManager.cs" />
     <Compile Include="GameResult.xaml.cs">
       <DependentUpon>GameResult.xaml</DependentUpon>
     </Compile>
     <Compile Include="LoadResources.xaml.cs">
       <DependentUpon>LoadResources.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Local\DownloadFile.cs" />
+    <Compile Include="Local\FindBallanceWindow.cs" />
     <Compile Include="PlayNow.xaml.cs">
       <DependentUpon>PlayNow.xaml</DependentUpon>
     </Compile>
@@ -147,6 +153,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="mapIcon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -17,10 +17,6 @@ namespace BallanceOnlineClient.Local {
         /// 键盘监控
         /// </summary>
         private BaseHook kh;
-        /// <summary>
-        /// 允许的按键
-        /// </summary>
-        private List<System.Windows.Forms.Keys> allowKeys;
 
         /// <summary>
         /// 是否屏蔽所有按键
@@ -31,14 +27,32 @@ namespace BallanceOnlineClient.Local {
         /// </summary>
         public bool GlobalHook { get { return globalHook; } set { globalHook = value; } }
 
+        /// <summary>
+        /// 游戏允许按键
+        /// </summary>
+        private List<Keys> gameAllowKeys;
+        /// <summary>
+        /// 交流模式不允许按键
+        /// </summary>
+        private List<Keys> talkNotAllowKeys;
+
+        private bool hookFlag;
+
         public Hook() {
             globalHook = false;
             kh = new BaseHook();
-            allowKeys = new List<Keys> { Keys.Enter, Keys.Right, Keys.Left, Keys.Up, Keys.Down, Keys.Q, Keys.Escape, Keys.Space };
+            gameAllowKeys = new List<Keys> { Keys.Enter, Keys.Right, Keys.Left, Keys.Up, Keys.Down, Keys.Escape, Keys.Space, Keys.Shift };
+            talkNotAllowKeys = new List<Keys> { Keys.Enter, Keys.Right, Keys.Left, Keys.Up, Keys.Down, Keys.Space };
+            hookFlag = false;
         }
 
-        public void SetHook() {
+        /// <summary>
+        /// 设定屏蔽标准
+        /// </summary>
+        /// <param name="flag">true执行游戏标准，false执行交流标准</param>
+        public void SetHook(bool flag) {
             kh.InstallHook(this.KeyInput);
+            hookFlag = flag;
         }
 
         public void UnHook() {
@@ -49,13 +63,30 @@ namespace BallanceOnlineClient.Local {
 
             if (globalHook == true) { handle = true; return; }
 
-            //默认拦截
-            handle = true;
+            //分析模式
+            if (hookFlag == true) {
+                //game
 
-            //检索允许列表
-            foreach (Keys item in allowKeys) {
-                if ((int)item == hookStruct.vkCode) { handle = false; return; }
+                //默认拦截
+                handle = true;
+
+                //检索允许列表
+                foreach (Keys item in gameAllowKeys) {
+                    if ((int)item == hookStruct.vkCode) { handle = false; return; }
+                }
+            } else {
+                //talk
+
+                //默认不拦截
+                handle = false;
+
+                //检索允许列表
+                foreach (Keys item in talkNotAllowKeys) {
+                    if ((int)item == hookStruct.vkCode) { handle = true; return; }
+                }
             }
+
+
 
         }
 

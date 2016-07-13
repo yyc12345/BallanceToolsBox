@@ -67,17 +67,19 @@ namespace BallanceOnlineClient.Local {
         #region 找寻地址阶段
 
         /// <summary>
-        /// 初始化找址，选择线程
+        /// 初始化找址，选择线程，找到返回t，没找到返回f
         /// </summary>
-        public void StartSearching() {
+        public bool StartSearching() {
 
             foreach (Process p in Process.GetProcesses()) {
-                if (p.ProcessName == "Player") { selectedProcess = p; }
+                if (p.ProcessName == "Player") { selectedProcess = p; return true; }
             }
 
-            if (selectedProcess == null) {
-                throw new NotImplementedException("Couldn't find process!");
-            }
+            return false;
+            //if (selectedProcess == null) {
+                //throw new NotImplementedException("Couldn't find process!");
+
+            //}
 
         }
 

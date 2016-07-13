@@ -8,14 +8,14 @@ using System.Net;
 namespace BallanceOnline {
 
     public class Player {
-        /// <summary>
-        /// ip地址
-        /// </summary>
-        protected IPAddress playerIPAddress;
-        /// <summary>
-        /// ip地址
-        /// </summary>
-        public IPAddress PlayerIPAddress { get { return playerIPAddress; } }
+        ///// <summary>
+        ///// ip地址
+        ///// </summary>
+        //protected IPAddress playerIPAddress;
+        ///// <summary>
+        ///// ip地址
+        ///// </summary>
+        //public IPAddress PlayerIPAddress { get { return playerIPAddress; } }
         /// <summary>
         /// 玩家名称
         /// </summary>
@@ -101,11 +101,11 @@ namespace BallanceOnline {
         /// <summary>
         /// 负责的小节列表
         /// </summary>
-        protected List<int> dutyUnit;
+        protected List<string> dutyUnit;
         /// <summary>
         /// 负责的小节列表
         /// </summary>
-        public List<int> DutyUnit { get { return dutyUnit; } set { dutyUnit = value; } }
+        public List<string> DutyUnit { get { return dutyUnit; } set { dutyUnit = value; } }
         /// <summary>
         /// 所属组名
         /// </summary>
@@ -134,11 +134,11 @@ namespace BallanceOnline {
         /// <summary>
         /// 最终pp点数
         /// </summary>
-        protected uint finallyPP;
+        protected int finallyPP;
         /// <summary>
         /// 最终pp点数
         /// </summary>
-        public uint FinallyPP { get { return finallyPP; } set { finallyPP = value; } }
+        public int FinallyPP { get { return finallyPP; } set { finallyPP = value; } }
         /// <summary>
         /// 最终的称号
         /// </summary>
@@ -154,15 +154,15 @@ namespace BallanceOnline {
         /// <summary>
         /// 分数
         /// </summary>
-        public uint Mark;
+        public int Mark;
         /// <summary>
         /// 生命
         /// </summary>
-        public uint Life;
+        public int Life;
         /// <summary>
         /// pp
         /// </summary>
-        public uint PerfomancePoint;
+        public int PerfomancePoint;
 
     }
 

@@ -17,7 +17,7 @@ namespace BallanceOnlineClient.Online {
     public class TcpClientWithTimeout {
 
         TcpClient client;
-        string globalIP;
+        IPAddress globalIP;
         int globalPort;
         bool connected;
 
@@ -33,7 +33,7 @@ namespace BallanceOnlineClient.Online {
         /// <param name="port">端口</param>
         /// <param name="timeoutNumber">超时时间，毫秒单位</param>
         /// <param name="returnClient">返回的接受的client，超时返回null</param>
-        public void Connect(string ip, int port, int timeoutNumber, out TcpClient returnClient) {
+        public void Connect(IPAddress ip, int port, int timeoutNumber, out TcpClient returnClient) {
             globalIP = ip;
             globalPort = port;
 
@@ -58,7 +58,7 @@ namespace BallanceOnlineClient.Online {
         }
 
         private void TryConnect() {
-            client.Connect(IPAddress.Parse(globalIP), globalPort);
+            client.Connect(globalIP, globalPort);
             connected = true;
         }
 

@@ -32,8 +32,14 @@ namespace BallanceOnlineClient.Online {
         /// </summary>
         private NetworkStream stream;
 
+        /// <summary>
+        /// 初始化实例并开启侦测
+        /// </summary>
+        /// <param name="inputClient"></param>
+        /// <param name="replay"></param>
         public GameData(ref TcpClient inputClient, Action<string, byte[]> replay) {
             client = inputClient;
+            stream = inputClient.GetStream();
             ReplyNewMessage = new Action<string, byte[]>(replay);
             stopReadFlag = false;
 
@@ -66,8 +72,15 @@ namespace BallanceOnlineClient.Online {
 
         }
 
+        public void SendData(byte[] data) {
+            int length = data.Length;
+            stream.Write(BitConverter.GetBytes(length), 0, 4);
+            stream.Write(data, 0, length);
+        }
+
         public void Dispose() {
             stopReadFlag = true;
+            client.Close();
         }
 
 
