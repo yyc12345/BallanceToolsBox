@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BallanceOnlineClient"
         mc:Ignorable="d" Topmost="true" ShowInTaskbar="False"
-        Title="PlayNow" Height="400" Width="600" AllowsTransparency="True" WindowStyle="None" Background="#00000000">
+        Title="PlayNow" Height="600" Width="800" AllowsTransparency="True" WindowStyle="None" Background="#00000000">
     <Grid>
 
         <Grid Width="150" Background="#50000000" HorizontalAlignment="Left" Margin="0,30,0,100">
@@ -36,15 +36,15 @@
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
 
-                            <TextBlock Foreground="White" Grid.Row="0" FontSize="15" Text="{Binding name}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Foreground="White" Grid.Row="0" FontSize="15" Text="{Binding PlayerName}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
                             <StackPanel Grid.Row="2" HorizontalAlignment="Left" Orientation="Horizontal">
                                 <Ellipse Stroke="white" Fill="Gray" Width="15" Height="15" VerticalAlignment="Center"/>
-                                <TextBlock Foreground="White" Margin="5,0,0,0" Grid.Row="0" FontSize="15" Text="{Binding life}" VerticalAlignment="Center"/>
+                                <TextBlock Foreground="White" Margin="5,0,0,0" Grid.Row="0" FontSize="15" Text="{Binding NowLife}" VerticalAlignment="Center"/>
                             </StackPanel>
-                            <TextBlock Foreground="White" Margin="5,0,0,0" Grid.Row="2" FontSize="15" Text="{Binding time}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                            <TextBlock Foreground="White" Margin="5,0,0,0" Grid.Row="2" FontSize="15" Text="{Binding NowTime}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
 
-                            <TextBlock Foreground="White" Margin="5,0,0,0" Grid.Row="1" FontSize="15" Text="{Binding state}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <TextBlock Foreground="White" Margin="5,0,0,0" Grid.Row="1" FontSize="15" Text="{Binding NowState}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
@@ -80,15 +80,15 @@
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
 
-                            <TextBlock Foreground="White" Grid.Row="0" FontSize="15" Text="{Binding name}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Foreground="White" Grid.Row="0" FontSize="15" Text="{Binding PlayerName}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
                             <StackPanel Grid.Row="2" HorizontalAlignment="Left" Orientation="Horizontal">
                                 <Ellipse Stroke="white" Fill="Gray" Width="15" Height="15" VerticalAlignment="Center"/>
-                                <TextBlock Foreground="White" Margin="5,0,0,0" Grid.Row="0" FontSize="15" Text="{Binding life}" VerticalAlignment="Center"/>
+                                <TextBlock Foreground="White" Margin="5,0,0,0" Grid.Row="0" FontSize="15" Text="{Binding NowLife}" VerticalAlignment="Center"/>
                             </StackPanel>
-                            <TextBlock Foreground="White" Margin="5,0,0,0" Grid.Row="2" FontSize="15" Text="{Binding time}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                            <TextBlock Foreground="White" Margin="5,0,0,0" Grid.Row="2" FontSize="15" Text="{Binding NowTime}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
 
-                            <TextBlock Foreground="White" Margin="5,0,0,0" Grid.Row="1" FontSize="15" Text="{Binding state}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <TextBlock Foreground="White" Margin="5,0,0,0" Grid.Row="1" FontSize="15" Text="{Binding NowState}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
@@ -109,7 +109,7 @@
         <TextBlock x:Name="uiTimer" Text="" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" Background="#50000000" FontSize="20"/>
 
         <StackPanel Orientation="Vertical" VerticalAlignment="Bottom">
-            <ListBox x:Name="uiTalkList" Height="80" Background="#50000000" BorderThickness="0" Foreground="White" FontSize="12" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ListBox x:Name="uiTalkList" Height="60" Background="#50000000" BorderThickness="0" Foreground="White" FontSize="12" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel IsItemsHost="True" Orientation="Vertical" />
@@ -129,7 +129,7 @@
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
                 <TextBox x:Name="uiMsg" Background="#a0000000" BorderThickness="0" Foreground="White" FontSize="15" TextAlignment="Center"/>
-                <Button Grid.Column="1" x:Name="uiConnect" Content="  发送  " Width="{Binding Path=ActualWidth,ElementName=uiInputContainer}" FontSize="15"/>
+                <Button Grid.Column="1" x:Name="uiConnect" Content="  发送  " Width="{Binding Path=ActualWidth,ElementName=uiInputContainer}" FontSize="15" Click="uiConnect_Click"/>
             </Grid>
         </StackPanel>
 

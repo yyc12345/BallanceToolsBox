@@ -40,5 +40,22 @@ namespace BallanceOnline {
         /// </summary>
         public string CountMode { get { return countMode; } set { countMode = value; } }
 
+        /// <summary>
+        /// 组A名称
+        /// </summary>
+        protected string teamAName;
+        /// <summary>
+        /// 组A名称
+        /// </summary>
+        public string TeamAName { get { return teamAName; } set { teamAName = value; } }
+        /// <summary>
+        /// 组B名称
+        /// </summary>
+        protected string teamBName;
+        /// <summary>
+        /// 组A名称
+        /// </summary>
+        public string TeamBName { get { return teamBName; } set { teamBName = value; } }
+
     }
 }

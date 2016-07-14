@@ -24,29 +24,26 @@ namespace BallanceOnlineClient {
         }
 
         GlobalManager gm;
-
-        List<PlayerResourcesListItem> teamAList;
-        List<PlayerResourcesListItem> teamBList;
-
+        List<TalkListItem> talkList;
+        /// <summary>
+        /// 停止上交表示符
+        /// </summary>
         bool stopTurnIn;
 
-        public void Show(GlobalManager oldgm, string teamAName, string teamBName, List<PlayerResourcesListItem> teamA, List<PlayerResourcesListItem> teamB) {
+        public void Show(GlobalManager oldgm) {
             gm = oldgm;
             gm.ChangeTransportWindow("PlayNow");
 
             //set team name and shadow
-            uiTeamAName.Text = teamAName;
-            uiTeamBName.Text = teamBName;
-
-            teamAList = teamA;
-            teamBList = teamB;
+            uiTeamAName.Text = gm.ms.TeamAName;
+            uiTeamBName.Text = gm.ms.TeamBName;
 
             string myself = "";
             foreach (Player item in gm.gamePlayerList) {
                 if (item.PlayerName == gm.gameSettings.playerName) { myself = item.PlayerGroupName; break; }
             }
 
-            if (myself == teamAName) {
+            if (myself == gm.ms.TeamAName) {
                 uiTeamAShadow.Color = Color.FromArgb(255, 0, 0, 255);
                 uiTeamBShadow.Color = Color.FromArgb(255, 255, 0, 0);
             } else {
@@ -64,6 +61,19 @@ namespace BallanceOnlineClient {
             gm.PlayNow_teamDied = new Action<string>(teamDied);
             gm.PlayNow_turnToNewWindow = new Action(turnToNewWindow);
             gm.PlayNow_playerContinue = new Action<string>(playerContinue);
+            gm.PlayNow_newMessage = new Action<string>(newMessage);
+
+            //show player
+            var playerSplit = from item in gm.gamePlayerList
+                              where item.PlayerGroupName != ""
+                              group item by item.PlayerGroupName;
+            foreach (var item in playerSplit) {
+                if (item.Key == gm.ms.TeamAName) {
+                    uiTeamAList.ItemsSource = item.ToList<Player>();
+                } else {
+                    uiTeamBList.ItemsSource = item.ToList<Player>();
+                }
+            }
 
             stopTurnIn = false;
 
@@ -125,34 +135,16 @@ namespace BallanceOnlineClient {
         public void inputPlayerData(StringGroup input) {
             var cache = input.ToStringGroup();
 
-            uiTeamAList.ItemsSource = null;
-            foreach (PlayerResourcesListItem item in teamAList) {
-                if (item.name == cache[4]) {
-                    item.life = cache[1];
-                    item.time = cache[0];
-                    item.unit = cache[2];
+            foreach (Player item in gm.gamePlayerList) {
+                if (item.PlayerName == cache[4]) {
+                    item.NowLife  = cache[1];
+                    item.NowTime  = cache[0];
+                    item.NowUnit = cache[2];
 
                     ShowPrize(cache[3], cache[4]);
-
-                    uiTeamAList.ItemsSource = teamAList;
                     return;
                 }
             }
-            uiTeamAList.ItemsSource = teamAList;
-            uiTeamBList.ItemsSource = null;
-            foreach (PlayerResourcesListItem item in teamBList) {
-                if (item.name == cache[4]) {
-                    item.life = cache[1];
-                    item.time = cache[0];
-                    item.unit = cache[2];
-
-                    ShowPrize(cache[3], cache[4]);
-
-                    uiTeamBList.ItemsSource = teamBList;
-                    return;
-                }
-            }
-            uiTeamBList.ItemsSource = teamBList;
         }
 
         public void playerDied(string name) {
@@ -163,24 +155,13 @@ namespace BallanceOnlineClient {
                 stopTurnIn = true;
             }
 
-            uiTeamAList.ItemsSource = null;
-            foreach (PlayerResourcesListItem item in teamAList) {
-                if (name == item.name) {
-                    item.state = "已死亡";
-                    uiTeamAList.ItemsSource = teamAList;
+            foreach (Player item in gm.gamePlayerList) {
+                if (name == item.PlayerName) {
+                    item.NowState = "已死亡";
                     return;
                 }
             }
-            uiTeamAList.ItemsSource = teamAList;
-            uiTeamBList.ItemsSource = null;
-            foreach (PlayerResourcesListItem item in teamBList) {
-                if (name == item.name) {
-                    item.state = "已死亡";
-                    uiTeamBList.ItemsSource = teamBList;
-                    return;
-                }
-            }
-            uiTeamBList.ItemsSource = teamBList;
+
         }
 
         public void playerPaused(string name) {
@@ -190,24 +171,12 @@ namespace BallanceOnlineClient {
                 gm.kh.SetHook(false);
             }
 
-            uiTeamAList.ItemsSource = null;
-            foreach (PlayerResourcesListItem item in teamAList) {
-                if (name == item.name) {
-                    item.state = "已暂停";
-                    uiTeamAList.ItemsSource = teamAList;
+            foreach (Player item in gm.gamePlayerList) {
+                if (name == item.PlayerName) {
+                    item.NowState = "已暂停";
                     return;
                 }
             }
-            uiTeamAList.ItemsSource = teamAList;
-            uiTeamBList.ItemsSource = null;
-            foreach (PlayerResourcesListItem item in teamBList) {
-                if (name == item.name) {
-                    item.state = "已暂停";
-                    uiTeamBList.ItemsSource = teamBList;
-                    return;
-                }
-            }
-            uiTeamBList.ItemsSource = teamBList;
         }
 
         public void playerContinue(string name) {
@@ -217,24 +186,12 @@ namespace BallanceOnlineClient {
                 gm.kh.SetHook(true);
             }
 
-            uiTeamAList.ItemsSource = null;
-            foreach (PlayerResourcesListItem item in teamAList) {
-                if (name == item.name) {
-                    item.state = "正在游戏";
-                    uiTeamAList.ItemsSource = teamAList;
+            foreach (Player item in gm.gamePlayerList) {
+                if (name == item.PlayerName) {
+                    item.NowState = "正在游戏";
                     return;
                 }
             }
-            uiTeamAList.ItemsSource = teamAList;
-            uiTeamBList.ItemsSource = null;
-            foreach (PlayerResourcesListItem item in teamBList) {
-                if (name == item.name) {
-                    item.state = "正在游戏";
-                    uiTeamBList.ItemsSource = teamBList;
-                    return;
-                }
-            }
-            uiTeamBList.ItemsSource = teamBList;
         }
 
         public void playerSuccess(string name) {
@@ -245,58 +202,55 @@ namespace BallanceOnlineClient {
                 stopTurnIn = true;
             }
 
-            uiTeamAList.ItemsSource = null;
-            foreach (PlayerResourcesListItem item in teamAList) {
-                if (name == item.name) {
-                    item.state = "已胜利";
-                    uiTeamAList.ItemsSource = teamAList;
+            foreach (Player item in gm.gamePlayerList) {
+                if (name == item.PlayerName) {
+                    item.NowState = "已胜利";
                     return;
                 }
             }
-            uiTeamAList.ItemsSource = teamAList;
-            uiTeamBList.ItemsSource = null;
-            foreach (PlayerResourcesListItem item in teamBList) {
-                if (name == item.name) {
-                    item.state = "已胜利";
-                    uiTeamBList.ItemsSource = teamBList;
-                    return;
-                }
-            }
-            uiTeamBList.ItemsSource = teamBList;
+
         }
 
         public void teamDied(string teamName) {
 
             if (teamName == uiTeamAName.Text) {
-                uiTeamAList.ItemsSource = null;
-                foreach (PlayerResourcesListItem item in teamAList) {
-                    if (item.name == gm.gameSettings.playerName) {
+
+                foreach (Player item in gm.gamePlayerList) {
+                    if (item.PlayerName == gm.gameSettings.playerName) {
                         gm.kh.UnHook();
                         gm.kh.SetHook(false);
                         stopTurnIn = true;
                     }
-                    item.state = "已死亡";
+                    item.NowState = "已死亡";
                 }
-                uiTeamAList.ItemsSource = teamAList;
+
             } else {
-                uiTeamBList.ItemsSource = null;
-                foreach (PlayerResourcesListItem item in teamBList) {
-                    if (item.name == gm.gameSettings.playerName) {
+
+                foreach (Player item in gm.gamePlayerList) {
+                    if (item.PlayerName == gm.gameSettings.playerName) {
                         gm.kh.UnHook();
                         gm.kh.SetHook(false);
                         stopTurnIn = true;
                     }
-                    item.state = "已死亡";
+                    item.NowState = "已死亡";
                 }
-                uiTeamBList.ItemsSource = teamBList;
+
             }
+        }
+
+        public void newMessage(string msg) {
+            uiTalkList.ItemsSource = null;
+
+            talkList.Add(new TalkListItem { word = msg });
+
+            uiTalkList.ItemsSource = talkList;
         }
 
         public void turnToNewWindow() {
             stopTurnIn = true;
 
             var newWin = new GameResult();
-            newWin.Show(gm, uiTeamAName.Text, uiTeamBName.Text);
+            newWin.Show(gm);
 
             this.Close();
         }
@@ -305,6 +259,16 @@ namespace BallanceOnlineClient {
             //todo:
         }
 
+        /// <summary>
+        /// 发送消息
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void uiConnect_Click(object sender, RoutedEventArgs e) {
+            if (uiMsg.Text != "")
+                gm.dataGiveIn.SendData(CombineAndSplitSign.Combine(BallanceOnline.Const.ClientAndServerSign.Client, BallanceOnline.Const.SocketSign.Message, uiMsg.Text));
+            else MessageBox.Show("发送的消息不能为空");
+        }
     }
 
     public class NowPlayerListItem {

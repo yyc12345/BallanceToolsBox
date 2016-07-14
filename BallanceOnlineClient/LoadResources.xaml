@@ -69,10 +69,10 @@
                             </Rectangle>
                             <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <Ellipse Height="15" Width="15" Stroke="White" Fill="{Binding readyColor}" Margin="0,0,0,5" HorizontalAlignment="Center"/>
-                                <TextBlock Foreground="White" Grid.Row="0" FontSize="15" Text="{Binding name}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBlock Foreground="White" Grid.Row="0" FontSize="15" Text="{Binding PlayerName}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </StackPanel>
 
-                            <TextBlock TextWrapping="Wrap" Grid.Row="1" Foreground="White" FontSize="9" Text="{Binding duty}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock TextWrapping="Wrap" Grid.Row="1" Foreground="White" FontSize="9" Text="{Binding DutyUnitToString}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
@@ -100,10 +100,10 @@
                             </Rectangle>
                             <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <Ellipse Height="15" Width="15" Stroke="White" Fill="{Binding readyColor}" Margin="0,0,0,5" HorizontalAlignment="Center"/>
-                                <TextBlock Foreground="White" Grid.Row="0" FontSize="15" Text="{Binding name}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBlock Foreground="White" Grid.Row="0" FontSize="15" Text="{Binding PlayerName}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </StackPanel>
 
-                            <TextBlock TextWrapping="Wrap" Grid.Row="1" Foreground="White" FontSize="9" Text="{Binding duty}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock TextWrapping="Wrap" Grid.Row="1" Foreground="White" FontSize="9" Text="{Binding DutyUnitToString}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>

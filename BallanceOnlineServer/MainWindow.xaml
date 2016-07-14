@@ -4,9 +4,27 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BallanceOnlineServer"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d" TextElement.Foreground="{DynamicResource MaterialDesignBody}" Background="{DynamicResource MaterialDesignPaper}"
         Title="Ballance联机对战 服务器" Height="400" Width="600" Icon="icon.ico">
     <Grid>
-        <Button Content="准备开始" Width="100" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,5"/>
+        <TextBlock Foreground="Black" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,5,0,0" Text="等待加入"/>
+
+        <ListBox Background="#00000000" BorderThickness="0" Margin="20,50,20,50">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel IsItemsHost="True" Orientation="Vertical" />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <materialDesign:Card Height="50" Margin="10,10,10,0">
+                        <TextBlock Foreground="Black" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" Text="{Binding PlayerIPAddress}"/>
+                    </materialDesign:Card>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <Button Content="准备开始" IsEnabled="False" Width="100" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,5"/>
     </Grid>
 </Window>

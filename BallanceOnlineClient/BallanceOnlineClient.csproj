@@ -123,7 +123,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Online\GameData.cs" />
     <Compile Include="Online\TcpClientWithTimeout.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

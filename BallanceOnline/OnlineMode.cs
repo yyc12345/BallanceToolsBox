@@ -69,6 +69,44 @@ namespace BallanceOnline.Const {
         /// 球魂
         /// </summary>
         public const string BallSoul = "BS";
+
+        /// <summary>
+        /// 第一滴血
+        /// 条件：第一位丢失1条命的人
+        /// </summary>
+        public const string FirstBlood = "FB";
+        public const string FirstBloodSpeech = "First blood";
+        public const string FirstBloodShow = "第一次死亡";
+        /// <summary>
+        /// 沉默
+        /// 条件：没有生命了，彻底死亡
+        /// </summary>
+        public const string Silence = "S";
+        public const string SilenceSpeech = "Silence";
+        public const string SilenceShow = "命丧黄泉";
+        /// <summary>
+        /// 团灭
+        /// 条件：团队死亡
+        /// </summary>
+        public const string Ace = "A";
+        public const string AceSpeech = "Ace";
+        public const string AceShow = "全军覆没";
+        /// <summary>
+        /// 重生
+        /// 第一位获得第一个生命的人
+        /// </summary>
+        public const string Reborn = "RB";
+        public const string RebornSpeech = "Reborn";
+        public const string RebornShow = "获得第一条命";
+        /// <summary>
+        /// 时间
+        /// 第一位获得第一个时间的人
+        /// </summary>
+        public const string Time = "T";
+        public const string TimeSpeech = "Time";
+        public const string TimeShow = "获得第一个分";
+
+
     }
 
     /// <summary>
@@ -89,6 +127,12 @@ namespace BallanceOnline.Const {
         /// 客户端不使用
         /// </summary>
         public const string NewPlayer = "NP";
+        /// <summary>
+        /// 服务器使用
+        /// 指定某位玩家下线。数据区格式：string 玩家IP
+        /// 客户端不使用
+        /// </summary>
+        public const string DeletePlayer = "DP";
 
         /// <summary>
         /// 服务器使用
@@ -116,7 +160,7 @@ namespace BallanceOnline.Const {
         /// 服务器不使用
         /// 客户端使用
         /// 上交个人数据。数据区格式：SG 分隔符,
-        /// [SG mod列表 分隔符#,背景名,bgm名,玩家名]
+        /// [SG mod列表 分隔符#,背景名,bgm名,玩家名,SG 游戏记录 分隔符# (胜场#败场#排位赛场#接力赛场)]
         /// </summary>
         public const string InformationTurnIn = "ITI";
         ///// <summary>
@@ -130,7 +174,7 @@ namespace BallanceOnline.Const {
         /// <summary>
         /// 服务器使用
         /// 给玩家指派任务。数据区格式：SG 分隔符,
-        /// [0 玩家名,1 地图名称,2 地图md5,3 比赛计分方式,4 比赛模式,5 SG 此玩家负责的小节 分隔符#,6 所属组别,7 SG mod列表 分隔符#,8 背景名,9 bgm名]
+        /// [0 玩家名,1 地图名称,2 地图md5,3 比赛计分方式,4 比赛模式,5 SG 此玩家负责的小节 分隔符#,6 所属组别,7 SG mod列表 分隔符#,8 背景名,9 bgm名,10 IP地址]
         /// 客户端不使用
         /// </summary>
         public const string PlayerTask = "PT";
@@ -231,8 +275,12 @@ namespace BallanceOnline.Const {
 
         /// <summary>
         /// 服务器使用
-        /// 分发每位玩家的数据。数据区格式：SG 主分隔符, 次分隔符#
-        /// 主分隔符分割每位玩家，次分隔符[0 SG 每一小节的数据统计 主分隔符@ 次分隔符% 主分隔符分割每一小节，次分隔符(分数%生命%pp数) #1 总的hs/sr分数#2 总pp数#3 评定奖励#4 玩家名]
+        /// 分发每位玩家和组别的数据。数据区格式：SG 主分隔符, 次分隔符#
+        /// 主分隔符分割每位玩家，其中第一项是组数据，其余为个人数据
+        /// 
+        /// 组数据[0 A组名#1 A组成绩#2 A组pp数#3 B组名#4 B组成绩#5 B组pp数]
+        /// 个人数据[0 SG 每一小节的数据统计 主分隔符@ 次分隔符% 主分隔符分割每一小节，如果是接力赛，不参与评分部分将不传输，次分隔符(分数%生命%pp数%小节号) #1 总的hs/sr分数#2 总pp数#3 评定奖励#4 玩家名]
+        /// 
         /// 客户端不使用
         /// </summary>
         public const string AllPlayerGameData = "APGD";

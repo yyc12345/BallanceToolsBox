@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Sockets;
-using BallanceOnline;
-using System.Windows.Forms;
 using System.Threading;
 
-namespace BallanceOnlineClient.Online {
+namespace BallanceOnline {
 
     /// <summary>
     /// 游戏数据传输
@@ -18,19 +16,19 @@ namespace BallanceOnlineClient.Online {
         /// <summary>
         /// 链接器
         /// </summary>
-        private TcpClient client;
+        protected TcpClient client;
         /// <summary>
         /// 处理新数据的委托，委托到外部
         /// </summary>
-        private Action<string, byte[]> ReplyNewMessage;
+        protected Action<string, byte[]> ReplyNewMessage;
         /// <summary>
         /// 停止操作
         /// </summary>
-        private bool stopReadFlag;
+        protected bool stopReadFlag;
         /// <summary>
         /// 写入写出的流对象
         /// </summary>
-        private NetworkStream stream;
+        protected NetworkStream stream;
 
         /// <summary>
         /// 初始化实例并开启侦测

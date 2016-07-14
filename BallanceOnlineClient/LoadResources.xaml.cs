@@ -25,9 +25,6 @@ namespace BallanceOnlineClient {
 
         GlobalManager gm;
 
-        List<PlayerResourcesListItem> teamAList;
-        List<PlayerResourcesListItem> teamBList;
-
         public void Show(GlobalManager oldgm) {
             gm = oldgm;
             gm.ChangeTransportWindow("LoadResources");
@@ -35,9 +32,6 @@ namespace BallanceOnlineClient {
             gm.LoadResources_addPlayerInformation = new Action<StringGroup>(addPlayerInformation);
             gm.LoadResources_singlePlayerReady = new Action<string>(singlePlayerReady);
             gm.LoadResources_turnToNewWindow = new Action(turnToNewWindow);
-
-            teamAList = new List<PlayerResourcesListItem>();
-            teamBList = new List<PlayerResourcesListItem>();
 
             //以talk模式拦截-拦过了，继承拦截
             //gm.kh.SetHook(false);
@@ -52,15 +46,16 @@ namespace BallanceOnlineClient {
             List<string> cache3 = new StringGroup(cache1[7], "#").ToList();
 
             //add to core
-            gm.gamePlayerList.Add(new Player {
-                PlayerName = cache1[0],
-                ModList = cache3,
-                BackgroundName = cache1[8],
-                BGMName = cache1[9],
-  
-                DutyUnit = cache2,
-                PlayerGroupName = cache1[6]
-            });
+            foreach (Player item in gm.gamePlayerList) {
+                if (item.PlayerIPAddress == cache1[10]) {
+                    item.PlayerName = cache1[0];
+                    item.ModList = cache3;
+                    item.BackgroundName = cache1[8];
+                    item.BGMName = cache1[9];
+                    item.DutyUnit = cache2;
+                    item.PlayerGroupName = cache1[6];
+                }
+            }
 
             if (gm.ms.MapName == "") {
                 gm.ms.MapName = cache1[1];
@@ -68,6 +63,15 @@ namespace BallanceOnlineClient {
                 gm.ms.GameMode = cache1[4];
                 gm.ms.CountMode = cache1[3];
             }
+
+            //add team
+            if (gm.ms.TeamAName == "") {
+                gm.ms.TeamAName = cache1[6];
+                uiTeamAName.Text = cache1[6];
+            } else if (gm.ms.TeamBName == "") {
+                gm.ms.TeamBName = cache1[6];
+                uiTeamBName.Text = cache1[6];
+            } else { }
 
             //add to ui
             if (uiGameMapName.Text == "") {
@@ -101,54 +105,51 @@ namespace BallanceOnlineClient {
                 }
             }
 
-            //true=a false=b
-            bool selectTeam = true;
-            if (uiTeamAName.Text == "") {
-                uiTeamAName.Text = cache1[6];
-                selectTeam = true;
-            } else if (uiTeamAName.Text == cache1[6]) {
-                selectTeam = true;
-            } else if (uiTeamBName.Text == "") {
-                uiTeamBName.Text = cache1[6];
-                selectTeam = false;
-            } else {
-                selectTeam = false;
+            //show player
+            var playerSplit = from item in gm.gamePlayerList
+                              where item.PlayerGroupName != ""
+                              group item by item.PlayerGroupName;
+            foreach (var item in playerSplit) {
+                if (item.Key == gm.ms.TeamAName) {
+                    uiTeamAList.ItemsSource = item.ToList<Player>();
+                } else {
+                    uiTeamBList.ItemsSource = item.ToList<Player>();
+                }
             }
 
-            if (selectTeam) {
-                uiTeamAList.ItemsSource = null;
-                teamAList.Add(new PlayerResourcesListItem { name = cache1[0], duty = new StringGroup(cache1[5], "#").ToNewSplitWord(",") });
-                uiTeamAList.ItemsSource = teamAList;
-            } else {
-                uiTeamBList.ItemsSource = null;
-                teamBList.Add(new PlayerResourcesListItem { name = cache1[0], duty = new StringGroup(cache1[5], "#").ToNewSplitWord(",") });
-                uiTeamBList.ItemsSource = teamBList;
-            }
+
 
         }
 
         public void singlePlayerReady(string playerName) {
-            foreach (PlayerResourcesListItem item in teamAList) {
-                if (item.name == playerName) {
-                    uiTeamAList.ItemsSource = null;
+
+            //search
+            uiTeamAList.ItemsSource = null;
+            uiTeamBList.ItemsSource = null;
+            foreach (Player item in gm.gamePlayerList) {
+                if (item.PlayerName == playerName) {
                     item.playerIsReady();
-                    uiTeamAList.ItemsSource = teamAList;
-                    return;
+                    break;
                 }
             }
-            foreach (PlayerResourcesListItem item in teamBList) {
-                if (item.name == playerName) {
-                    uiTeamBList.ItemsSource = null;
-                    item.playerIsReady();
-                    uiTeamBList.ItemsSource = teamBList;
-                    return;
+
+            //show player
+            var playerSplit = from item in gm.gamePlayerList
+                              where item.PlayerGroupName != ""
+                              group item by item.PlayerGroupName;
+            foreach (var item in playerSplit) {
+                if (item.Key == uiTeamAName.Text) {
+                    uiTeamAList.ItemsSource = item.ToList<Player>();
+                } else {
+                    uiTeamBList.ItemsSource = item.ToList<Player>();
                 }
             }
+
         }
 
         public void turnToNewWindow() {
             var newWin = new PlayNow();
-            newWin.Show(gm, uiTeamAName.Text, uiTeamBName.Text, teamAList, teamBList);
+            newWin.Show(gm);
 
             this.Close();
         }
@@ -156,27 +157,27 @@ namespace BallanceOnlineClient {
     }
 
 
-    public class PlayerResourcesListItem {
+    //public class PlayerResourcesListItem {
 
-        public PlayerResourcesListItem() {
-            readyColor = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
-            life = "3";
-            time = "1000";
-            state = "正在游戏";
-        }
+    //    public PlayerResourcesListItem() {
+    //        readyColor = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
+    //        life = "3";
+    //        time = "1000";
+    //        state = "正在游戏";
+    //    }
 
-        public SolidColorBrush readyColor { get; set; }
-        public string name { get; set; }
-        public string duty { get; set; }
+    //    public SolidColorBrush readyColor { get; set; }
+    //    public string name { get; set; }
+    //    public string duty { get; set; }
 
-        public void playerIsReady() {
-            readyColor = new SolidColorBrush(Color.FromArgb(255, 0, 255, 0));
-        }
+    //    public void playerIsReady() {
+    //        readyColor = new SolidColorBrush(Color.FromArgb(255, 0, 255, 0));
+    //    }
 
-        public string life { get; set; }
-        public string time { get; set; }
-        public string state { get; set; }
-        public string unit { get; set; }
-    }
+    //    public string life { get; set; }
+    //    public string time { get; set; }
+    //    public string state { get; set; }
+    //    public string unit { get; set; }
+    //}
 
 }

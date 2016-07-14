@@ -25,13 +25,13 @@ namespace BallanceOnlineClient {
 
         GlobalManager gm;
 
-        public void Show(GlobalManager oldgm, string teamAName, string teamBName) {
+        public void Show(GlobalManager oldgm) {
             gm = oldgm;
             gm.ChangeTransportWindow("GameResult");
 
             //set team name and shadow
-            uiTeamAName.Text = teamAName;
-            uiTeamBName.Text = teamBName;
+            uiTeamAName.Text = gm.ms.TeamAName;
+            uiTeamBName.Text = gm.ms.TeamBName;
 
             uiGameMapName.Text = gm.ms.MapName;
             switch (gm.ms.GameMode) {
@@ -80,11 +80,10 @@ namespace BallanceOnlineClient {
                 //process untiData
                 var cache1 = new StringGroup(dataSplit[0], "@").ToStringGroup();
                 var unitData = new List<PlayerUnitData>();
-                int unitCount = 1;
+
                 foreach (string item2 in cache1) {
                     var cache2 = new StringGroup(item2, "%").ToStringGroup();
-                    unitData.Add(new PlayerUnitData { Unit = unitCount.ToString(), Mark = cache2[0], Life = cache2[1], PerfomancePoint = cache2[2] });
-                    unitCount += 1;
+                    unitData.Add(new PlayerUnitData { Unit = cache2[3], Mark = cache2[0], Life = cache2[1], PerfomancePoint = cache2[2] });
                 }
 
                 foreach (Player item3 in gm.gamePlayerList) {
@@ -102,6 +101,7 @@ namespace BallanceOnlineClient {
             var teamBList = new List<Player>();
 
             var result = from i in gm.gamePlayerList
+                         where i.PlayerGroupName != ""
                          group i by i.PlayerGroupName;
 
             foreach (IGrouping<string, Player> item in result) {
@@ -156,7 +156,8 @@ namespace BallanceOnlineClient {
             uiTeamAList.ItemsSource = teamAList;
             uiTeamBList.ItemsSource = teamBList;
 
-
+            uiNewPlay.IsEnabled = true;
+            uiExit.IsEnabled = true;
 
         }
 
@@ -194,6 +195,6 @@ namespace BallanceOnlineClient {
             int _secound = int.Parse(secound) % 60;
             return hour.ToString() + ":" + _secound.ToString();
         }
-
+        //todo:把组的评判移到服务器
     }
 }

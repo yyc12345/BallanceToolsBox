@@ -139,6 +139,10 @@ namespace BallanceOnlineClient {
                     WaitPlayer_addSinglePlayer(CombineAndSplitSign.ConvertToString(data));
                     break;
 
+                case ClientAndServerSign.Server + SocketSign.DeletePlayer:
+                    WaitPlayer_deletePlayer(CombineAndSplitSign.ConvertToString(data));
+                    break;
+
                 case ClientAndServerSign.Server + SocketSign.Message:
                     switch (nowPage) {
                         case 0:
@@ -148,9 +152,8 @@ namespace BallanceOnlineClient {
                             //没有
                             break;
                         case 2:
-
+                            PlayNow_newMessage(CombineAndSplitSign.ConvertToString(data));
                             break;
-
                         case 3:
                             //没有
                             break;
@@ -253,6 +256,8 @@ namespace BallanceOnlineClient {
 
         public Action<string> WaitPlayer_addSinglePlayer;
 
+        public Action<string> WaitPlayer_deletePlayer;
+
         public Action<string> WaitPlayer_newMessage;
 
         public Action WaitPlayer_turnToNewWindow;
@@ -279,6 +284,8 @@ namespace BallanceOnlineClient {
         public Action<string> PlayNow_playerContinue;
 
         public Action<string> PlayNow_teamDied;
+
+        public Action<string> PlayNow_newMessage;
 
         public Action PlayNow_turnToNewWindow;
 

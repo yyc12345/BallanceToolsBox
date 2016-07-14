@@ -25,8 +25,7 @@ namespace BallanceOnlineClient {
 
         GlobalManager gm;
 
-        List<WaitPlayerListItem> playerList;
-        List<WaitPlayerListItem> talkList;
+        List<TalkListItem> talkList;
 
         public void Show(GlobalManager oldgm, ref TcpClient tc) {
             gm = oldgm;
@@ -38,8 +37,8 @@ namespace BallanceOnlineClient {
             gm.WaitPlayer_turnToNewWindow = new Action(turnToNewWindow);
             //以talk模式拦截-拦过了，继承拦截
             //gm.kh.SetHook(false);
-            playerList = new List<WaitPlayerListItem>();
-            talkList = new List<WaitPlayerListItem>();
+            uiPlayerList.ItemsSource = gm.gamePlayerList;
+            talkList = new List<TalkListItem>();
 
             this.Show();
 
@@ -50,26 +49,38 @@ namespace BallanceOnlineClient {
 
             var cache = pList.ToStringGroup();
             foreach (string item in cache) {
-                playerList.Add(new WaitPlayerListItem { word = item });
+                gm.gamePlayerList.Add(new Player { PlayerIPAddress = item });
             }
 
-            uiPlayerList.ItemsSource = playerList;
+            uiPlayerList.ItemsSource = gm.gamePlayerList;
         }
 
         public void addSinglePlayer(string playerIP) {
             uiPlayerList.ItemsSource = null;
 
-            playerList.Add(new WaitPlayerListItem { word = playerIP });
+            gm.gamePlayerList.Add(new Player { PlayerIPAddress = playerIP });
 
-            uiPlayerList.ItemsSource = playerList;
+            uiPlayerList.ItemsSource = gm.gamePlayerList;
+        }
+
+        public void deletePlayer(string playerIP) {
+            uiPlayerList.ItemsSource = null;
+
+            int index = 0;
+            foreach (Player item in gm.gamePlayerList) {
+                if(item.PlayerIPAddress==playerIP) { gm.gamePlayerList.RemoveAt(index); break; }
+                index++;
+            }
+
+            uiPlayerList.ItemsSource = gm.gamePlayerList;
         }
 
         public void newMessage(string msg) {
             uiTalkList.ItemsSource = null;
 
-            talkList.Add(new WaitPlayerListItem { word = msg });
+            talkList.Add(new TalkListItem { word = msg });
 
-            uiTalkList.ItemsSource = playerList;
+            uiTalkList.ItemsSource = talkList;
         }
 
         public void turnToNewWindow() {
@@ -92,7 +103,8 @@ namespace BallanceOnlineClient {
 
     }
 
-    public class WaitPlayerListItem {
-        public string word { get; set; }
-    }
+}
+
+public class TalkListItem {
+    public string word { get; set; }
 }
