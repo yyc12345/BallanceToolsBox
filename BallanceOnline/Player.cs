@@ -67,38 +67,6 @@ namespace BallanceOnline {
         public string BGMName { get { return bgmName; } set { bgmName = value; } }
 
         /// <summary>
-        /// 地图名
-        /// </summary>
-        protected string mapName;
-        /// <summary>
-        /// 地图名
-        /// </summary>
-        public string MapName { get { return mapName; } set { mapName = value; } }
-        /// <summary>
-        /// 地图md5-用于验证
-        /// </summary>
-        protected string mapMD5;
-        /// <summary>
-        /// 地图md5-用于验证
-        /// </summary>
-        public string MapMD5 { get { return mapMD5; } set { mapMD5 = value; } }
-        /// <summary>
-        /// 游戏模式
-        /// </summary>
-        protected string gameMode;
-        /// <summary>
-        /// 游戏模式
-        /// </summary>
-        public string GameMode { get { return gameMode; } set { gameMode = value; } }
-        /// <summary>
-        /// 游戏计分模式
-        /// </summary>
-        protected string countMode;
-        /// <summary>
-        /// 游戏计分模式
-        /// </summary>
-        public string CountMode { get { return countMode; } set { countMode = value; } }
-        /// <summary>
         /// 负责的小节列表
         /// </summary>
         protected List<string> dutyUnit;
@@ -134,11 +102,11 @@ namespace BallanceOnline {
         /// <summary>
         /// 最终pp点数
         /// </summary>
-        protected int finallyPP;
+        protected string finallyPP;
         /// <summary>
         /// 最终pp点数
         /// </summary>
-        public int FinallyPP { get { return finallyPP; } set { finallyPP = value; } }
+        public string FinallyPP { get { return finallyPP; } set { finallyPP = value; } }
         /// <summary>
         /// 最终的称号
         /// </summary>
@@ -154,15 +122,19 @@ namespace BallanceOnline {
         /// <summary>
         /// 分数
         /// </summary>
-        public int Mark;
+        public string Unit { get; set; }
+        /// <summary>
+        /// 分数
+        /// </summary>
+        public string Mark { get; set; }
         /// <summary>
         /// 生命
         /// </summary>
-        public int Life;
+        public string Life { get; set; }
         /// <summary>
         /// pp
         /// </summary>
-        public int PerfomancePoint;
+        public string PerfomancePoint { get; set; }
 
     }
 

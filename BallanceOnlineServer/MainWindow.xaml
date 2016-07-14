@@ -4,9 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BallanceOnlineServer"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        mc:Ignorable="d" TextElement.Foreground="{DynamicResource MaterialDesignBody}" Background="{DynamicResource MaterialDesignPaper}"
+        Title="Ballance联机对战 服务器" Height="400" Width="600" Icon="icon.ico">
     <Grid>
-        
+        <Button Content="准备开始" Width="100" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,5"/>
     </Grid>
 </Window>

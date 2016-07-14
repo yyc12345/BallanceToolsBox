@@ -53,6 +53,7 @@ namespace BallanceOnlineClient {
 
             gamePlayerList = new List<Player>();
             df = new DownloadFile();
+            ms = new MapSetting();
         }
 
         #region 窗口位移方面
@@ -72,9 +73,9 @@ namespace BallanceOnlineClient {
 
         #region cheatEngine方面
 
-        CheatEngine markMonitor;
-        CheatEngine lifeMonitor;
-        CheatEngine unitMonitor;
+        public CheatEngine markMonitor;
+        public CheatEngine lifeMonitor;
+        public CheatEngine unitMonitor;
 
         /// <summary>
         /// 设定监视器
@@ -209,6 +210,10 @@ namespace BallanceOnlineClient {
                     PlayNow_playerPaused(CombineAndSplitSign.ConvertToString(data));
                     break;
 
+                case ClientAndServerSign.Server + SocketSign.PlayerContinue:
+                    PlayNow_playerContinue(CombineAndSplitSign.ConvertToString(data));
+                    break;
+
                 case ClientAndServerSign.Server + SocketSign.PlayerSuccess:
                     PlayNow_playerSuccess(CombineAndSplitSign.ConvertToString(data));
                     break;
@@ -271,6 +276,7 @@ namespace BallanceOnlineClient {
         public Action<string> PlayNow_playerDied;
         public Action<string> PlayNow_playerSuccess;
         public Action<string> PlayNow_playerPaused;
+        public Action<string> PlayNow_playerContinue;
 
         public Action<string> PlayNow_teamDied;
 
@@ -306,6 +312,12 @@ namespace BallanceOnlineClient {
         }
 
         DownloadFile df;
+
+        #endregion
+
+        #region 地图部分
+
+        public MapSetting ms;
 
         #endregion
 

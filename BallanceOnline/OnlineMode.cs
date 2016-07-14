@@ -211,6 +211,12 @@ namespace BallanceOnline.Const {
         public const string PlayerPaused = "PP";
         /// <summary>
         /// 服务器使用
+        /// 广播某人从暂停中恢复。数据区格式：string 恢复玩家名
+        /// 客户端不使用
+        /// </summary>
+        public const string PlayerContinue = "PC";
+        /// <summary>
+        /// 服务器使用
         /// 广播某人完成。数据区格式：string 完成玩家名
         /// 客户端不使用
         /// </summary>
@@ -226,7 +232,7 @@ namespace BallanceOnline.Const {
         /// <summary>
         /// 服务器使用
         /// 分发每位玩家的数据。数据区格式：SG 主分隔符, 次分隔符#
-        /// 主分隔符分割每位玩家，次分隔符[SG 每一小节的数据统计 主分隔符@ 次分隔符% 主分隔符分割每一小节，次分隔符(分数%生命%pp数) #总的hs/sr分数#总pp数#评定奖励]
+        /// 主分隔符分割每位玩家，次分隔符[0 SG 每一小节的数据统计 主分隔符@ 次分隔符% 主分隔符分割每一小节，次分隔符(分数%生命%pp数) #1 总的hs/sr分数#2 总pp数#3 评定奖励#4 玩家名]
         /// 客户端不使用
         /// </summary>
         public const string AllPlayerGameData = "APGD";

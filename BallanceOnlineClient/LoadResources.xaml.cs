@@ -57,13 +57,17 @@ namespace BallanceOnlineClient {
                 ModList = cache3,
                 BackgroundName = cache1[8],
                 BGMName = cache1[9],
-                MapName = cache1[1],
-                MapMD5 = cache1[2],
-                GameMode = cache1[4],
-                CountMode = cache1[3],
+  
                 DutyUnit = cache2,
                 PlayerGroupName = cache1[6]
             });
+
+            if (gm.ms.MapName == "") {
+                gm.ms.MapName = cache1[1];
+                gm.ms.MapMD5 = cache1[2];
+                gm.ms.GameMode = cache1[4];
+                gm.ms.CountMode = cache1[3];
+            }
 
             //add to ui
             if (uiGameMapName.Text == "") {
@@ -144,7 +148,7 @@ namespace BallanceOnlineClient {
 
         public void turnToNewWindow() {
             var newWin = new PlayNow();
-            newWin.Show(gm, uiTeamAName.Text, uiTeamBName.Text);
+            newWin.Show(gm, uiTeamAName.Text, uiTeamBName.Text, teamAList, teamBList);
 
             this.Close();
         }
@@ -156,6 +160,9 @@ namespace BallanceOnlineClient {
 
         public PlayerResourcesListItem() {
             readyColor = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
+            life = "3";
+            time = "1000";
+            state = "正在游戏";
         }
 
         public SolidColorBrush readyColor { get; set; }
@@ -165,6 +172,11 @@ namespace BallanceOnlineClient {
         public void playerIsReady() {
             readyColor = new SolidColorBrush(Color.FromArgb(255, 0, 255, 0));
         }
+
+        public string life { get; set; }
+        public string time { get; set; }
+        public string state { get; set; }
+        public string unit { get; set; }
     }
 
 }

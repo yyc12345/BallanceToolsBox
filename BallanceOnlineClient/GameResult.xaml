@@ -7,7 +7,7 @@
         mc:Ignorable="d" Topmost="true" ShowInTaskbar="False"
         Title="GameResult" Height="400" Width="500" AllowsTransparency="True" WindowStyle="None" Background="#50000000">
     <Grid>
-        
+
         <Grid VerticalAlignment="Top" Margin="0,20,0,0" Height="50" HorizontalAlignment="Center" Background="#50000000">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="60"/>
@@ -55,25 +55,61 @@
                 </ListBox.ItemsPanel>
                 <ListBox.ItemTemplate>
                     <DataTemplate >
-                        <Grid Width="100">
+                        <Grid Height="60">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="2*"/>
+                                <RowDefinition Height="*"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
-                            <Rectangle Stroke="White" Grid.RowSpan="2" Margin="1">
-                                <Rectangle.Effect >
-                                    <BlurEffect RenderingBias="Quality"/>
-                                </Rectangle.Effect>
-                                <Rectangle.Fill>
-                                    <ImageBrush ImageSource="mapIcon.png"/>
-                                </Rectangle.Fill>
-                            </Rectangle>
-                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <Ellipse Height="15" Width="15" Stroke="White" Fill="{Binding readyColor}" Margin="0,0,0,5" HorizontalAlignment="Center"/>
-                                <TextBlock Foreground="White" Grid.Row="0" FontSize="15" Text="{Binding name}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </StackPanel>
 
-                            <TextBlock TextWrapping="Wrap" Grid.Row="1" Foreground="White" FontSize="9" Text="{Binding duty}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <Rectangle Stroke="White" Fill="#50000000" Grid.ColumnSpan="3" Margin="1" Grid.RowSpan="2"/>
+
+                            <TextBlock Foreground="White" FontSize="15" Text="{Binding PlayerName}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <StackPanel Orientation="Vertical" Width="200">
+                                            <ListBox Background="#ffffffff" BorderThickness="0" ItemsSource="{Binding PlayerUnitPrize}" Width="200">
+                                                <ListBox.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <WrapPanel IsItemsHost="True" />
+                                                    </ItemsPanelTemplate>
+                                                </ListBox.ItemsPanel>
+                                                <ListBox.ItemTemplate>
+                                                    <DataTemplate>
+
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                            </Grid.ColumnDefinitions>
+
+                                                            <TextBlock Foreground="Black" FontSize="12" Text="{Binding Unit}"/>
+                                                            <TextBlock Foreground="Black" FontSize="12" Text="{Binding Mark}" Grid.Column="1"/>
+                                                            <TextBlock Foreground="Black" FontSize="12" Text="{Binding Life}" Grid.Column="2"/>
+                                                            <TextBlock Foreground="Black" FontSize="12" Text="{Binding PerfomancePoint}" Grid.Column="3"/>
+                                                        </Grid>
+                                                        
+                                                    </DataTemplate>
+                                                </ListBox.ItemTemplate>
+                                            </ListBox>
+                                        </StackPanel>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                
+                            </TextBlock>
+                            <TextBlock Grid.Column="1" Grid.Row="0" Foreground="White" FontSize="15" Text="{Binding FinallyPrize}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock.Effect>
+                                    <DropShadowEffect Color="Yellow" BlurRadius="10" RenderingBias="Quality" ShadowDepth="0" Direction="270"/>
+                                </TextBlock.Effect>
+                            </TextBlock>
+                            <TextBlock Grid.Column="0" Grid.Row="1" Foreground="White" FontSize="9" Text="{Binding FinallyResult}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Grid.Row="1" Foreground="White" FontSize="9" Text="{Binding FinallyPP}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
@@ -86,25 +122,61 @@
                 </ListBox.ItemsPanel>
                 <ListBox.ItemTemplate>
                     <DataTemplate >
-                        <Grid Width="100">
+                        <Grid Height="60">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="2*"/>
+                                <RowDefinition Height="*"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
-                            <Rectangle Stroke="White" Grid.RowSpan="2" Margin="1">
-                                <Rectangle.Effect >
-                                    <BlurEffect RenderingBias="Quality"/>
-                                </Rectangle.Effect>
-                                <Rectangle.Fill>
-                                    <ImageBrush ImageSource="mapIcon.png"/>
-                                </Rectangle.Fill>
-                            </Rectangle>
-                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <Ellipse Height="15" Width="15" Stroke="White" Fill="{Binding readyColor}" Margin="0,0,0,5" HorizontalAlignment="Center"/>
-                                <TextBlock Foreground="White" Grid.Row="0" FontSize="15" Text="{Binding name}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </StackPanel>
 
-                            <TextBlock TextWrapping="Wrap" Grid.Row="1" Foreground="White" FontSize="9" Text="{Binding duty}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <Rectangle Stroke="White" Fill="#50000000" Grid.ColumnSpan="3" Margin="1" Grid.RowSpan="2"/>
+
+                            <TextBlock Foreground="White" FontSize="15" Text="{Binding name}" HorizontalAlignment="Center" VerticalAlignment="Center">
+
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <StackPanel Orientation="Vertical" Width="200">
+                                            <ListBox Background="#ffffffff" BorderThickness="0" ItemsSource="{Binding PlayerUnitPrize}" Width="200">
+                                                <ListBox.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <WrapPanel IsItemsHost="True" />
+                                                    </ItemsPanelTemplate>
+                                                </ListBox.ItemsPanel>
+                                                <ListBox.ItemTemplate>
+                                                    <DataTemplate>
+
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                            </Grid.ColumnDefinitions>
+
+                                                            <TextBlock Foreground="Black" FontSize="12" Text="{Binding Unit}"/>
+                                                            <TextBlock Foreground="Black" FontSize="12" Text="{Binding Mark}" Grid.Column="1"/>
+                                                            <TextBlock Foreground="Black" FontSize="12" Text="{Binding Life}" Grid.Column="2"/>
+                                                            <TextBlock Foreground="Black" FontSize="12" Text="{Binding PerfomancePoint}" Grid.Column="3"/>
+                                                        </Grid>
+
+                                                    </DataTemplate>
+                                                </ListBox.ItemTemplate>
+                                            </ListBox>
+                                        </StackPanel>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                         
+                            </TextBlock>
+                            <TextBlock Grid.Column="1" Grid.Row="0" Foreground="White" FontSize="15" Text="{Binding prize}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock.Effect>
+                                    <DropShadowEffect Color="Yellow" BlurRadius="10" RenderingBias="Quality" ShadowDepth="0" Direction="270"/>
+                                </TextBlock.Effect>
+                            </TextBlock>
+                            <TextBlock Grid.Column="0" Grid.Row="1" Foreground="White" FontSize="9" Text="{Binding mark}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Grid.Row="1" Foreground="White" FontSize="9" Text="{Binding pp}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
@@ -126,7 +198,7 @@
                 <TextBlock Foreground="White" FontSize="12" Grid.Row="0" Grid.Column="0" Text="PP：" VerticalAlignment="Center" Margin="10,0,0,0"/>
                 <TextBlock x:Name="uiTeamBPP" Foreground="White" FontSize="12" Grid.Row="0" Grid.Column="0" Text="" VerticalAlignment="Center"/>
             </StackPanel>
-            
+
             <TextBlock Foreground="White" FontSize="20" Grid.RowSpan="2" Grid.Column="1" Text="VS" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0,5,0">
                 <TextBlock.Effect>
                     <DropShadowEffect Direction="270" Color="#7FFFFF00" RenderingBias="Quality" ShadowDepth="0" BlurRadius="10"/>
@@ -136,8 +208,8 @@
         </Grid>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,10">
-            <Button Width="100" Content="再来一局" FontSize="15" Margin="0,0,10,0"/>
-            <Button Width="100" Content="就此退出" FontSize="15"/>
+            <Button x:Name="uiNewPlay" IsEnabled="False" Width="100" Content="再来一局" FontSize="15" Margin="0,0,10,0" Click="uiNewPlay_Click"/>
+            <Button x:Name="uiExit" IsEnabled="False" Width="100" Content="就此退出" FontSize="15" Click="uiExit_Click"/>
         </StackPanel>
 
     </Grid>
