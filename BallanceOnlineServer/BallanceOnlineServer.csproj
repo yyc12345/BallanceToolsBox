@@ -50,6 +50,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -68,19 +69,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="GameIsRuning.xaml.cs">
-      <DependentUpon>GameIsRuning.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="DataCache.cs" />
+    <Compile Include="GiveOutMapFile.cs" />
     <Compile Include="PlayerMark.xaml.cs">
       <DependentUpon>PlayerMark.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TaskGiveOut.xaml.cs">
-      <DependentUpon>TaskGiveOut.xaml</DependentUpon>
-    </Compile>
-    <Page Include="GameIsRuning.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
+    <Compile Include="Timer.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -95,10 +89,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="PlayerMark.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="TaskGiveOut.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

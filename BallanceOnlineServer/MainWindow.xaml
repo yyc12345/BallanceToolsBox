@@ -6,11 +6,17 @@
         xmlns:local="clr-namespace:BallanceOnlineServer"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d" TextElement.Foreground="{DynamicResource MaterialDesignBody}" Background="{DynamicResource MaterialDesignPaper}"
-        Title="Ballance联机对战 服务器" Height="400" Width="600" Icon="icon.ico">
+        Title="Ballance联机对战 服务器" Height="400" Width="600" Icon="icon.ico" Loaded="Window_Loaded">
     <Grid>
-        <TextBlock Foreground="Black" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,5,0,0" Text="等待加入"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,5,0,0" >
+            <TextBlock Foreground="Black" FontSize="20" Text="等待加入"/>
+            <TextBlock Foreground="Black" FontSize="15" Text="本地IP：" VerticalAlignment="Center" Margin="20,0,0,0"/>
+            <TextBlock x:Name="uiIP" Foreground="Black" FontSize="15" Text="" VerticalAlignment="Center"/>
+            <TextBlock Foreground="Black" FontSize="15" Text="本地端口：" VerticalAlignment="Center" Margin="10,0,0,0"/>
+            <TextBlock x:Name="uiPort" Foreground="Black" FontSize="15" Text="" VerticalAlignment="Center"/>
+        </StackPanel>
 
-        <ListBox Background="#00000000" BorderThickness="0" Margin="20,50,20,50">
+        <ListBox x:Name="uiPlayerList" Background="#00000000" BorderThickness="0" Margin="20,50,20,50">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel IsItemsHost="True" Orientation="Vertical" />
@@ -25,6 +31,6 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <Button Content="准备开始" IsEnabled="False" Width="100" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,5"/>
+        <Button x:Name="uiNext" Content="准备开始" IsEnabled="False" Width="100" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,5" Click="uiNext_Click"/>
     </Grid>
 </Window>

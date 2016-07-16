@@ -72,7 +72,25 @@ namespace BallanceOnlineClient {
             //split player
             var playerSplit = data.ToStringGroup();
 
+
+            //先取出组信息
+            var groupMsg = new StringGroup(playerSplit[0], "#").ToStringGroup();
+            if (groupMsg[0] == gm.ms.TeamAName) {
+                uiTeamAMark.Text = groupMsg[1];
+                uiTeamBMark.Text = groupMsg[4];
+                uiTeamAPP.Text = groupMsg[2];
+                uiTeamBPP.Text = groupMsg[5];
+            } else {
+                uiTeamAMark.Text = groupMsg[4];
+                uiTeamBMark.Text = groupMsg[1];
+                uiTeamAPP.Text = groupMsg[5];
+                uiTeamBPP.Text = groupMsg[2];
+            }
+
+
+            int index = 0;
             foreach (string item in playerSplit) {
+                if (index == 0) { index++; continue; }
 
                 //split data
                 var dataSplit = new StringGroup(item, "#").ToStringGroup();
@@ -89,11 +107,13 @@ namespace BallanceOnlineClient {
                 foreach (Player item3 in gm.gamePlayerList) {
                     if (item3.PlayerName == dataSplit[4]) {
                         item3.PlayerUnitPrize = unitData;
-                        item3.FinallyResult = dataSplit[1];
+                        item3.FinallyMark = dataSplit[1];
                         item3.FinallyPP = dataSplit[2];
                         item3.FinallyPrize = dataSplit[3];
                     }
                 }
+
+                index++;
             }
 
             //input to list
@@ -105,7 +125,7 @@ namespace BallanceOnlineClient {
                          group i by i.PlayerGroupName;
 
             foreach (IGrouping<string, Player> item in result) {
-                if (item.Key == uiTeamAName.Text) {
+                if (item.Key == gm.ms.TeamAName) {
                     foreach (Player item2 in item) {
                         teamAList.Add(item2);
                     }
@@ -115,42 +135,6 @@ namespace BallanceOnlineClient {
                     }
                 }
             }
-
-            //show team result
-            int teamAPP = 0, teamBPP = 0;
-            foreach (var item in teamAList) {
-                teamAPP += int.Parse(item.FinallyPP);
-            }
-            teamAPP = teamAPP / teamAList.Count;
-            foreach (var item in teamBList) {
-                teamBPP += int.Parse(item.FinallyPP);
-            }
-            teamBPP = teamBPP / teamBList.Count;
-
-            string teamAMark, teamBMark;
-            if (gm.ms.CountMode == BallanceOnline.Const.CountMode.SpeedRun || gm.ms.CountMode == BallanceOnline.Const.CountMode.CrazySpeedRun) {
-                var markAList = from item in teamAList
-                                select DateToSecound(item.FinallyResult);
-                var markBList = from item in teamBList
-                                select DateToSecound(item.FinallyResult);
-
-                teamAMark = SecoundToDate(Average(markAList, teamAList.Count));
-                teamBMark = SecoundToDate(Average(markBList, teamBList.Count));
-            } else {
-                var markAList = from item in teamAList
-                                select item.FinallyResult;
-                var markBList = from item in teamBList
-                                select item.FinallyResult;
-
-                teamAMark = SecoundToDate(Average(markAList, teamAList.Count));
-                teamBMark = SecoundToDate(Average(markBList, teamBList.Count));
-            }
-
-            uiTeamAMark.Text = teamAMark;
-            uiTeamBMark.Text = teamBMark;
-            uiTeamAPP.Text = teamAPP.ToString();
-            uiTeamBPP.Text = teamBPP.ToString();
-
 
             //show
             uiTeamAList.ItemsSource = teamAList;
@@ -175,26 +159,5 @@ namespace BallanceOnlineClient {
             Environment.Exit(0);
         }
 
-
-        private string Average(IEnumerable<string> list, int count) {
-            int sum = 0;
-            foreach (string item in list) {
-                sum += int.Parse(item);
-            }
-
-            return (sum / count).ToString();
-        }
-
-        public string DateToSecound(string date) {
-            var result = date.Split(':');
-            return (int.Parse(result[0]) * 60 + int.Parse(result[1])).ToString();
-        }
-
-        public string SecoundToDate(string secound) {
-            int hour = int.Parse(secound) / 60;
-            int _secound = int.Parse(secound) % 60;
-            return hour.ToString() + ":" + _secound.ToString();
-        }
-        //todo:把组的评判移到服务器
     }
 }

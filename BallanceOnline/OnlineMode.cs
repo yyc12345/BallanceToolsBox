@@ -160,7 +160,7 @@ namespace BallanceOnline.Const {
         /// 服务器不使用
         /// 客户端使用
         /// 上交个人数据。数据区格式：SG 分隔符,
-        /// [SG mod列表 分隔符#,背景名,bgm名,玩家名,SG 游戏记录 分隔符# (胜场#败场#排位赛场#接力赛场)]
+        /// [0 SG mod列表 分隔符#,1 背景名,2 bgm名,3 玩家名,4 SG 游戏记录 分隔符# (胜场#败场#排位赛场#接力赛场)]
         /// </summary>
         public const string InformationTurnIn = "ITI";
         ///// <summary>
@@ -207,7 +207,7 @@ namespace BallanceOnline.Const {
 
         /// <summary>
         /// 服务器使用
-        /// 要求每个人进入10秒倒计时，准备开始游戏。无数据区
+        /// 要求每个人进入20秒倒计时，准备开始游戏。无数据区
         /// 客户端不使用
         /// </summary>
         public const string ReadyPlay = "RP";
@@ -242,8 +242,7 @@ namespace BallanceOnline.Const {
         public const string PlayerDied = "PD";
         /// <summary>
         /// 服务器使用
-        /// 广播某组死亡，结算游戏数据，组死亡和人死亡选择一个广播，通常，玩家完不成他所负责的小节时，会通知组死亡。数据区格式：SG 分隔符,
-        /// 分隔符分割死亡组里的玩家名称
+        /// 广播某组死亡，结算游戏数据，组死亡和人死亡选择一个广播，通常，玩家完不成他所负责的小节时，会通知组死亡。数据区格式：string 死亡组名
         /// 客户端不使用
         /// </summary>
         public const string TeamDied = "TD";
@@ -291,6 +290,8 @@ namespace BallanceOnline.Const {
          */
 
         //随后服务器关闭连接，结束
+
+        //todo:把需要用户名作为标识符传输的，改为ip地址传输
     }
 }
 

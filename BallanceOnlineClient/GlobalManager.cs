@@ -164,8 +164,16 @@ namespace BallanceOnlineClient {
                 case ClientAndServerSign.Server + SocketSign.OrderTurnIn:
                     WaitPlayer_turnToNewWindow();
                     //返回数据
-                    var cache3 = new StringGroup(gameSettings.ModList, "#");
-                    var cache2 = new ArrayList { cache3.ToString(), gameSettings.backgroundName, gameSettings.BGMName, gameSettings.playerName };
+                    var cache2 = new ArrayList {
+                        new StringGroup(gameSettings.ModList, "#").ToString(),
+                        gameSettings.backgroundName,
+                        gameSettings.BGMName,
+                        gameSettings.playerName,
+                        gameSettings.historyWinCount,
+                        gameSettings.historyFailCount,
+                        gameSettings.historyRankedCount,
+                        gameSettings.historyRelayRaceCount
+                    };
                     dataGiveIn.SendData(CombineAndSplitSign.Combine(ClientAndServerSign.Client, SocketSign.InformationTurnIn, new StringGroup(cache2, ",").ToString()));
 
                     nowPage += 1;
@@ -176,7 +184,7 @@ namespace BallanceOnlineClient {
                     LoadResources_addPlayerInformation(new StringGroup(CombineAndSplitSign.ConvertToString(data), ","));
                     break;
 
-                    //********************************************
+                //********************************************
                 case ClientAndServerSign.Server + SocketSign.StartDownloadingMap:
                     df.Start("");
                     break;

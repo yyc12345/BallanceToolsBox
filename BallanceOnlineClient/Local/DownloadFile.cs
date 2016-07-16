@@ -49,10 +49,13 @@ namespace BallanceOnlineClient.Local {
 
                 //check
                 var cache = BallanceOnline.MD5.GetMD5HashFromFile(Environment.CurrentDirectory + @"\cacheMap.nmo");
+                IsWrite = false;
 
                 //if (cache == checkMD5)
                     return true;
                 //else return false;
+
+
 
             }else { throw new NotImplementedException("File not open"); }
 

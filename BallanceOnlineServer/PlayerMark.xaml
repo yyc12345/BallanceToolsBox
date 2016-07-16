@@ -4,9 +4,346 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BallanceOnlineServer"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d" TextElement.Foreground="{DynamicResource MaterialDesignBody}" Background="{DynamicResource MaterialDesignPaper}"
-        Title="Ballance联机对战 服务器" Height="400" Width="600" Icon="icon.ico">
+        Title="Ballance联机对战 服务器" Height="600" Width="800" Icon="icon.ico">
+
     <Grid>
+
+        <TextBlock Foreground="Black" FontSize="20" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,5,0,0" Text="游戏操控"/>
+
+        <Grid Margin="20,50,20,0" VerticalAlignment="Top" Height="120">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid VerticalAlignment="Center" Grid.Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <TextBlock Foreground="Black" FontSize="15" Text="组A名称：" VerticalAlignment="Center"/>
+                    <TextBox x:Name="uiGroupAName" Foreground="Black" Grid.Column="1"/>
+
+                </Grid>
+                <Grid VerticalAlignment="Center" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Foreground="Black" FontSize="15" Text="组B名称：" VerticalAlignment="Center"/>
+                    <TextBox x:Name="uiGroupBName" Foreground="Black" Grid.Column="1"/>
+
+                </Grid>
+                <Grid VerticalAlignment="Center" Grid.Column="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Foreground="Black" FontSize="15" Text="小节总数：" VerticalAlignment="Center"/>
+                    <Slider x:Name="uiUnitCount" Grid.Column="1" Minimum="1" Value="1" Maximum="99"/>
+                    <TextBlock Grid.Column="2" Foreground="Black" FontSize="15" Margin="5,0,0,0" Text="{Binding Path=Value,ElementName=uiUnitCount}" VerticalAlignment="Center"/>
+                    
+                </Grid>
+     
+            </Grid>
+
+            <Grid VerticalAlignment="Center" Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Foreground="Black" FontSize="15" Text="游戏地图地址：" VerticalAlignment="Center"/>
+                <TextBox IsReadOnly="True" VerticalAlignment="Center" x:Name="uiMapPath" Foreground="Black" Grid.Column="1"/>
+
+                <Button x:Name="uiSelectMap" Content="选取文件" Grid.Column="2" VerticalAlignment="Center" Margin="10,0,10,0" Click="Button_Click"/>
+                <TextBlock Grid.Column="3" Foreground="Black" FontSize="15" Text="地图MD5：" VerticalAlignment="Center"/>
+                <TextBlock x:Name="uiMapMD5" Grid.Column="3" Foreground="Black" FontSize="15" Text="" VerticalAlignment="Center"/>
+            </Grid>
+
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid VerticalAlignment="Center" Grid.Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Foreground="Black" FontSize="15" Text="游戏模式：" VerticalAlignment="Center"/>
+                    <ComboBox x:Name="uiGameMode" Grid.Column="1" Margin="0,0,10,0">
+                        <ComboBoxItem Content="排位赛" IsSelected="True" />
+                        <ComboBoxItem Content="接力赛"/>
+                    </ComboBox>
+
+                </Grid>
+                <Grid VerticalAlignment="Center" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Foreground="Black" FontSize="15" Text="计分方式：" VerticalAlignment="Center"/>
+                    <ComboBox x:Name="uiCountMode" Grid.Column="1" Margin="0,0,10,0">
+                        <ComboBoxItem Content="HS" IsSelected="True" />
+                        <ComboBoxItem Content="SR"/>
+                        <ComboBoxItem Content="疯狂HS"/>
+                        <ComboBoxItem Content="疯狂SR"/>
+                    </ComboBox>
+
+                </Grid>
+
+            </Grid>
+
+        </Grid>
+
+        <ListBox x:Name="uiPlayerList" Background="#00000000" BorderThickness="0" Margin="20,190,20,50" MouseDoubleClick="uiPlayerList_MouseDoubleClick">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel IsItemsHost="True" Orientation="Vertical" />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <materialDesign:Card Height="350">
+                        <Grid Background="#50000000">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="150"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- user name and ip-->
+                            <Grid Grid.Row="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Orientation="Horizontal" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <Ellipse Fill="{Binding groupColor}" Stroke="White" Width="15" Height="15" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                                    <TextBlock Foreground="Black" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,5,0,0" Text="{Binding PlayerName}"/>
+                                </StackPanel>
+
+                                <TextBlock Grid.Column="1" Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,5,0,0" Text="{Binding PlayerIPAddress}"/>
+
+                            </Grid>
+
+                            <Grid Grid.Row="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+
+                                <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="10,0,0,0" VerticalAlignment="Center">
+                                    <TextBlock Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Text="背景名称："/>
+                                    <TextBlock Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding BackgroundName}"/>
+                                    <TextBlock Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20,0,0,0" Text="BGM名称："/>
+                                    <TextBlock Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding BGMName}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="10,0,0,0" VerticalAlignment="Center">
+                                    <TextBlock Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Text="Mod列表："/>
+                                    <TextBlock Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding DutyUnitToString}"/>
+                                </StackPanel>
+
+                            </Grid>
+
+                            <Grid Grid.Row="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" >
+                                    <TextBlock Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Text="胜利场数："/>
+                                    <TextBlock Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding HistoryWinCount}"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" >
+                                    <TextBlock Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Text="失败场数："/>
+                                    <TextBlock Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding HistoryFailCount}"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" >
+                                    <TextBlock Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Text="排位赛次数："/>
+                                    <TextBlock Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding HistoryRankedRaceCount}"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" >
+                                    <TextBlock Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Text="接力赛次数："/>
+                                    <TextBlock Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding HistoryRelayRaceCount}"/>
+                                </StackPanel>
+
+                            </Grid>
+
+                            <Grid Grid.Row="3">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" >
+                                    <TextBlock Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Text="当前分数："/>
+                                    <TextBlock Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding NowTime}"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" >
+                                    <TextBlock Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Text="当前生命："/>
+                                    <TextBlock Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding NowLife}"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" >
+                                    <TextBlock Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Text="当前小节："/>
+                                    <TextBlock Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding NowUnit}"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" >
+                                    <TextBlock Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Text="当前状态："/>
+                                    <TextBlock Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding NowState}"/>
+                                </StackPanel>
+
+                            </Grid>
+
+                            <Grid Grid.Row="4">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Column="0" Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0" Text="小节数据"/>
+
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Grid.Column="0" Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Text="小节号"/>
+                                    <TextBlock Grid.Column="1" Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Text="分数"/>
+                                    <TextBlock Grid.Column="2" Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Text="生命"/>
+                                    <TextBlock Grid.Column="3" Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Text="PP"/>
+
+                                </Grid>
+
+                                <ListBox Grid.Row="2" Background="#00000000" ItemsSource="{Binding PlayerUnitPrize}" BorderThickness="0,1,0,0" BorderBrush="White" >
+                                    <ListBox.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel IsItemsHost="True" Orientation="Vertical" />
+                                        </ItemsPanelTemplate>
+                                    </ListBox.ItemsPanel>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <materialDesign:Card Height="50">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <TextBlock Grid.Column="0" Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Unit}"/>
+                                                    <TextBlock Grid.Column="1" Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Mark}"/>
+                                                    <TextBlock Grid.Column="2" Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Life}"/>
+                                                    <TextBlock Grid.Column="3" Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding PerfomancePoint}"/>
+
+                                                </Grid>
+                                            </materialDesign:Card>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+
+                            </Grid>
+
+                        </Grid>
+                    </materialDesign:Card>
+
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,5">
+            <Button x:Name="uiSetMap" Content="确认地图" Width="100" Click="uiGSetMap_Click"/>
+            <Button x:Name="uiGiveOutTask" Content="分发任务" IsEnabled="False" Width="100" Margin="10,0,0,0" Click="uiGiveOutTask_Click"/>
+            <Button x:Name="uiRunGame" Content="开始游戏" IsEnabled="False" Width="100" Margin="10,0,10,0" Click="uiRunGame_Click"/>
+            <Button x:Name="uiShowMark" Content="结束游戏" IsEnabled="False" Width="100" Click="uiShowMark_Click"/>
+        </StackPanel>
+
+        <Grid x:Name="uiSet" Visibility="Collapsed" Background="#50000000">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="4*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
+            <materialDesign:Card Height="300" Grid.Row="1" Grid.Column="1">
+                <StackPanel Orientation="Vertical" Margin="10">
+                    
+                    <Grid VerticalAlignment="Center" Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Foreground="Black" FontSize="15" Text="组别：" VerticalAlignment="Center"/>
+                        <ComboBox x:Name="uiSetGroup" Grid.Column="1">
+                            <ComboBoxItem Content="A组" IsSelected="True" />
+                            <ComboBoxItem Content="B组"/>
+                        </ComboBox>
+
+                    </Grid>
+ 
+                    <TextBlock Text="请确保某个小组内至少有1人。" Foreground="Red" FontSize="15" Margin="0,10,0,0"/>
+
+                    <Grid VerticalAlignment="Center" Grid.Column="1" Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Foreground="Black" FontSize="15" Text="负责的小节：" VerticalAlignment="Center"/>
+                        <TextBox x:Name="uiSetDuty" Grid.Column="1" IsReadOnly="True" VerticalAlignment="Center"/>
+                        <Button Grid.Column="2" Content="," Width="40" Margin="10,0,0,0" VerticalAlignment="Center" ToolTip="点此输入小节号"/>
+
+                    </Grid>
+
+                    <TextBlock Text="负责的小节使用 , （英文）分割，小节号从1起始。" Foreground="Red" FontSize="15" Margin="0,10,0,0"/>
+                    <TextBlock Text="当接力赛时，请确保组内人员要将地图小节全部负责完毕，不得遗漏，" Foreground="Red" FontSize="15"/>
+                    <TextBlock Text="也不得多人负责一小节。排位赛请将所有小节写入。示例：1,2,3,4,5" Foreground="Red" FontSize="15"/>
+
+                    <Button Content="确认数据" Width="100" Margin="0,50,0,0" HorizontalAlignment="Center" Click="Button_Click_1"/>
+                </StackPanel>
+            </materialDesign:Card>
+        </Grid>
         
     </Grid>
 </Window>

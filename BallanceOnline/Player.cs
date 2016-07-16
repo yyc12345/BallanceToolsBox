@@ -83,6 +83,47 @@ namespace BallanceOnline {
 
         #endregion
 
+        #region 玩家历史纪录功能
+
+        /// <summary>
+        /// 胜利场数
+        /// </summary>
+        protected string historyWinCount;
+        /// <summary>
+        /// 胜利场数
+        /// </summary>
+        public string HistoryWinCount { get { return historyWinCount; } set { historyWinCount = value; } }
+
+        /// <summary>
+        /// 失败场数
+        /// </summary>
+        protected string historyFailCount;
+        /// <summary>
+        /// 失败场数
+        /// </summary>
+        public string HistoryFailCount { get { return historyFailCount; } set { historyFailCount = value; } }
+
+
+        /// <summary>
+        /// 排位赛次数
+        /// </summary>
+        protected string historyRankedRaceCount;
+        /// <summary>
+        /// 排位赛次数
+        /// </summary>
+        public string HistoryRankedRaceCount { get { return historyRankedRaceCount; } set { historyRankedRaceCount = value; } }
+
+        /// <summary>
+        /// 接力赛次数
+        /// </summary>
+        protected string historyRelayRaceCount;
+        /// <summary>
+        /// 接力赛次数
+        /// </summary>
+        public string HistoryRelayRaceCount { get { return historyRelayRaceCount; } set { historyRelayRaceCount = value; } }
+
+        #endregion
+
         #region 游戏分配信息
 
         /// <summary>
@@ -206,7 +247,7 @@ namespace BallanceOnline {
         /// <summary>
         /// 最终的hs/sr成绩
         /// </summary>
-        public string FinallyResult { get { return finallyMark; } set { finallyMark = value; } }
+        public string FinallyMark { get { return finallyMark; } set { finallyMark = value; } }
         /// <summary>
         /// 最终pp点数
         /// </summary>
@@ -230,7 +271,7 @@ namespace BallanceOnline {
 
     public class PlayerUnitData {
         /// <summary>
-        /// 分数
+        /// 小节
         /// </summary>
         public string Unit { get; set; }
         /// <summary>

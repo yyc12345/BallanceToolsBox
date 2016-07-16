@@ -76,6 +76,7 @@ namespace BallanceOnlineClient {
             }
 
             stopTurnIn = false;
+            talkList = new List<TalkListItem>();
 
             this.Show();
 
@@ -83,35 +84,35 @@ namespace BallanceOnlineClient {
            {
                uiTimer.Text = "20";
 
-                //显示欢迎来到
+               //显示欢迎来到
 
-                for (int i = 0; i < 5; i++) {
+               for (int i = 0; i < 5; i++) {
                    Thread.Sleep(1000);
                    uiTimer.Text = (int.Parse(uiTimer.Text) - 1).ToString();
                }
 
-                //此时=15
-                //显示负责的关卡
+               //此时=15
+               //显示负责的关卡
 
-                for (int i = 0; i < 10; i++) {
+               for (int i = 0; i < 10; i++) {
                    Thread.Sleep(1000);
                    uiTimer.Text = (int.Parse(uiTimer.Text) - 1).ToString();
                }
 
-                //此时=5
-                //准备开始
+               //此时=5
+               //准备开始
 
-                for (int i = 0; i < 5; i++) {
+               for (int i = 0; i < 5; i++) {
                    Thread.Sleep(1000);
                    uiTimer.Text = (int.Parse(uiTimer.Text) - 1).ToString();
                }
 
-                //隐藏
-                uiTimer.Visibility = Visibility.Collapsed;
-                //全军出击
+               //隐藏
+               uiTimer.Visibility = Visibility.Collapsed;
+               //全军出击
 
-                //提交循环
-                while (true) {
+               //提交循环
+               while (true) {
 
                    if (stopTurnIn == true) { break; }
 
@@ -125,9 +126,9 @@ namespace BallanceOnlineClient {
 
                }
 
-                //结束
+               //结束
 
-            });
+           });
 
         }
 
@@ -137,8 +138,8 @@ namespace BallanceOnlineClient {
 
             foreach (Player item in gm.gamePlayerList) {
                 if (item.PlayerName == cache[4]) {
-                    item.NowLife  = cache[1];
-                    item.NowTime  = cache[0];
+                    item.NowLife = cache[1];
+                    item.NowTime = cache[0];
                     item.NowUnit = cache[2];
 
                     ShowPrize(cache[3], cache[4]);
@@ -213,9 +214,8 @@ namespace BallanceOnlineClient {
 
         public void teamDied(string teamName) {
 
-            if (teamName == uiTeamAName.Text) {
-
-                foreach (Player item in gm.gamePlayerList) {
+            foreach (Player item in gm.gamePlayerList) {
+                if (item.PlayerGroupName == teamName) {
                     if (item.PlayerName == gm.gameSettings.playerName) {
                         gm.kh.UnHook();
                         gm.kh.SetHook(false);
@@ -223,19 +223,8 @@ namespace BallanceOnlineClient {
                     }
                     item.NowState = "已死亡";
                 }
-
-            } else {
-
-                foreach (Player item in gm.gamePlayerList) {
-                    if (item.PlayerName == gm.gameSettings.playerName) {
-                        gm.kh.UnHook();
-                        gm.kh.SetHook(false);
-                        stopTurnIn = true;
-                    }
-                    item.NowState = "已死亡";
-                }
-
             }
+
         }
 
         public void newMessage(string msg) {
