@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net;
 using System.Windows.Media;
+using BallanceOnline.Const;
 
 namespace BallanceOnline {
 
@@ -12,10 +13,13 @@ namespace BallanceOnline {
 
         public Player() {
             readyColor = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
+            nowStateColor = new SolidColorBrush(Color.FromArgb(80, 0, 0, 0));
             nowLife = "3";
             nowTime = "1000";
             nowUnit = "1";
             nowUnit = "1";
+            playerName = "";
+
         }
 
         #region 基础信息
@@ -64,6 +68,10 @@ namespace BallanceOnline {
         /// mod列表
         /// </summary>
         public List<string> ModList { get { return modList; } set { modList = value; } }
+        /// <summary>
+        /// mod列表字符串表达式，用,分割
+        /// </summary>
+        public string ModListToString { get { return new StringGroup(modList, ",").ToString(); } }
         /// <summary>
         /// 背景名
         /// </summary>
@@ -220,6 +228,28 @@ namespace BallanceOnline {
         public string NowState { get { return nowState; } set { nowState = value; } }
 
         /// <summary>
+        /// 表示用户游戏进行状态的颜色
+        /// </summary>
+        public SolidColorBrush nowStateColor { get; set; }
+        /// <summary>
+        /// 设置用户游戏进行状态的颜色
+        /// </summary>
+        public void SetNowStateColor() {
+            switch (nowState) {
+                case PlayerState.Playing:
+                    nowStateColor = new SolidColorBrush(Color.FromArgb(80, 0, 0, 0));
+                    break;
+                case PlayerState.Died:
+                    nowStateColor = new SolidColorBrush(Color.FromArgb(80, 255, 0, 0));
+                    break;
+                case PlayerState.Success:
+                    nowStateColor = new SolidColorBrush(Color.FromArgb(80, 0, 255, 0));
+                    break;
+            }
+
+        }
+
+        /// <summary>
         /// 当前所在小节
         /// </summary>
         protected string nowUnit;
@@ -240,6 +270,22 @@ namespace BallanceOnline {
         /// 每一小节成绩
         /// </summary>
         public List<PlayerUnitData> PlayerUnitPrize { get { return playerUnitPrize; } set { playerUnitPrize = value; } }
+        /// <summary>
+        /// 小节数据字符串表达
+        /// </summary>
+        public string PlayerUnitPrizeToString {
+            get {
+
+                List<string> returnData = new List<string>();
+
+                foreach (PlayerUnitData item in playerUnitPrize) {
+                    returnData.Add("小节：" + item.Unit + " 成绩：" + item.Mark + " 生命：" + item.Life + " PP：" + item.PerfomancePoint);
+                }
+
+                return new StringGroup(returnData, Environment.NewLine).ToString();
+
+            }
+        }
         /// <summary>
         /// 最终的hs/sr成绩
         /// </summary>
@@ -293,19 +339,15 @@ namespace BallanceOnline {
         /// <summary>
         /// 正在游戏
         /// </summary>
-        public const string Playing = "正在游戏";
-        /// <summary>
-        /// 暂停中
-        /// </summary>
-        public const string Paused = "暂停中";
+        public const string Playing = "P";
         /// <summary>
         /// 已死亡
         /// </summary>
-        public const string Died = "已死亡";
+        public const string Died = "D";
         /// <summary>
         /// 已通关
         /// </summary>
-        public const string Success = "已通关";
+        public const string Success = "S";
     }
 
 

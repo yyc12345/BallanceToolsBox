@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Net;
 using System.Net.Sockets;
+using BallanceOnlineClient.Online;
 
 namespace BallanceOnlineClient {
     /// <summary>
@@ -56,6 +57,7 @@ namespace BallanceOnlineClient {
                 TcpClient getClient;
                 uiConnect.Content = "正在连接";
                 uiConnect.IsEnabled = false;
+                gm.tcpConnect = new TcpClientWithTimeout();
                 gm.tcpConnect.Connect(serverIp, serverPort, 5000, out getClient);
 
                 if (getClient == null) {

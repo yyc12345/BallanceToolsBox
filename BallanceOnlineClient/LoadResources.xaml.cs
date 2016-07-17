@@ -67,43 +67,53 @@ namespace BallanceOnlineClient {
             //add team
             if (gm.ms.TeamAName == "") {
                 gm.ms.TeamAName = cache1[6];
-                uiTeamAName.Text = cache1[6];
+                uiTeamAName.Dispatcher.Invoke(() => { uiTeamAName.Text = cache1[6]; });
             } else if (gm.ms.TeamBName == "") {
                 gm.ms.TeamBName = cache1[6];
-                uiTeamBName.Text = cache1[6];
+                uiTeamBName.Dispatcher.Invoke(() => { uiTeamBName.Text = cache1[6]; });
             } else { }
 
             //add to ui
-            if (uiGameMapName.Text == "") {
-                uiGameMapName.Text = cache1[1];
-            }
-            if (uiGameMode.Text == "") {
-                switch (cache1[4]) {
-                    case BallanceOnline.Const.GameMode.RankedRace:
-                        uiGameMode.Text = "排位赛";
-                        break;
-                    case BallanceOnline.Const.GameMode.RelayRace:
-                        uiGameMode.Text = "接力赛";
-                        break;
+            uiGameMapName.Dispatcher.Invoke(() =>
+            {
+                if (uiGameMapName.Text == "") {
+                    uiGameMapName.Text = cache1[1];
                 }
-            }
-            if (uiGameRule.Text == "") {
-                switch (cache1[3]) {
-                    case BallanceOnline.Const.CountMode.HighScore:
-                        uiGameRule.Text = "HS";
-                        break;
-                    case BallanceOnline.Const.CountMode.SpeedRun:
-                        uiGameRule.Text = "SR";
-                        break;
-                    case BallanceOnline.Const.CountMode.CrazyHighScore:
-                        uiGameRule.Text = "疯狂HS";
-                        break;
-                    case BallanceOnline.Const.CountMode.CrazySpeedRun:
-                        uiGameRule.Text = "疯狂SR";
-                        break;
+            });
+            uiGameMode.Dispatcher.Invoke(() =>
+            {
+                if (uiGameMode.Text == "") {
+                    switch (cache1[4]) {
+                        case BallanceOnline.Const.GameMode.RankedRace:
+                            uiGameMode.Text = "排位赛";
+                            break;
+                        case BallanceOnline.Const.GameMode.RelayRace:
+                            uiGameMode.Text = "接力赛";
+                            break;
+                    }
+                }
+            });
+            uiGameRule.Dispatcher.Invoke(() =>
+            {
+                if (uiGameRule.Text == "") {
+                    switch (cache1[3]) {
+                        case BallanceOnline.Const.CountMode.HighScore:
+                            uiGameRule.Text = "HS";
+                            break;
+                        case BallanceOnline.Const.CountMode.SpeedRun:
+                            uiGameRule.Text = "SR";
+                            break;
+                        case BallanceOnline.Const.CountMode.CrazyHighScore:
+                            uiGameRule.Text = "疯狂HS";
+                            break;
+                        case BallanceOnline.Const.CountMode.CrazySpeedRun:
+                            uiGameRule.Text = "疯狂SR";
+                            break;
 
+                    }
                 }
-            }
+            });
+
 
             //show player
             var playerSplit = from item in gm.gamePlayerList
@@ -111,9 +121,9 @@ namespace BallanceOnlineClient {
                               group item by item.PlayerGroupName;
             foreach (var item in playerSplit) {
                 if (item.Key == gm.ms.TeamAName) {
-                    uiTeamAList.ItemsSource = item.ToList<Player>();
+                    uiTeamAList.Dispatcher.Invoke(() => { uiTeamAList.ItemsSource = item.ToList<Player>();});                 
                 } else {
-                    uiTeamBList.ItemsSource = item.ToList<Player>();
+                    uiTeamBList.Dispatcher.Invoke(() => { uiTeamBList.ItemsSource = item.ToList<Player>();});              
                 }
             }
 
@@ -124,8 +134,6 @@ namespace BallanceOnlineClient {
         public void singlePlayerReady(string playerName) {
 
             //search
-            uiTeamAList.ItemsSource = null;
-            uiTeamBList.ItemsSource = null;
             foreach (Player item in gm.gamePlayerList) {
                 if (item.PlayerName == playerName) {
                     item.playerIsReady();
@@ -138,10 +146,18 @@ namespace BallanceOnlineClient {
                               where item.PlayerGroupName != ""
                               group item by item.PlayerGroupName;
             foreach (var item in playerSplit) {
-                if (item.Key == uiTeamAName.Text) {
-                    uiTeamAList.ItemsSource = item.ToList<Player>();
+                if (item.Key == gm.ms.TeamAName) {
+                    uiTeamAList.Dispatcher.Invoke(() =>
+                    {
+                        uiTeamAList.ItemsSource = null;
+                        uiTeamAList.ItemsSource = item.ToList<Player>();
+                    });  
                 } else {
-                    uiTeamBList.ItemsSource = item.ToList<Player>();
+                    uiTeamBList.Dispatcher.Invoke(() =>
+                    {
+                        uiTeamBList.ItemsSource = null;
+                        uiTeamBList.ItemsSource = item.ToList<Player>();
+                    });     
                 }
             }
 

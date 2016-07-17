@@ -4,13 +4,18 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BallanceOnlineClient"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d" Topmost="true" ShowInTaskbar="False"
         Title="WaitPlayer" Height="400" Width="400" AllowsTransparency="True" WindowStyle="None" Background="#50000000">
     <Grid>
 
-        <TextBlock Text="召集你的团队" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,50,0,0" TextWrapping="Wrap" Foreground="White" FontSize="25"/>
+        <Grid HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,50,0,0">
+            <materialDesign:Card Background="#50000000">
+                <TextBlock Text="召集你的团队" TextWrapping="Wrap" Foreground="White" FontSize="20" Margin="10"/>
+            </materialDesign:Card>
+        </Grid>
 
-        <ListBox x:Name="uiPlayerList" VerticalAlignment="Top" Margin="100,100,100,100" Height="200" Background="#00000000" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+        <ListBox x:Name="uiPlayerList" Margin="100,120,100,50" Background="#00000000" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel IsItemsHost="True" Orientation="Vertical" />
@@ -18,37 +23,55 @@
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
                 <DataTemplate >
-                    <Grid Height="30">
-                        <Rectangle Stroke="White" Fill="#50000000" Margin="1"/>
-                        <TextBlock Foreground="White" FontSize="15" Text="{Binding PlayerIPAddress}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Grid>
+                        <materialDesign:Card Height="50" Background="#50000000">
+                            <TextBlock Foreground="White" FontSize="15" Text="{Binding PlayerIPAddress}" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        </materialDesign:Card>
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
 
         <StackPanel Orientation="Vertical" VerticalAlignment="Bottom">
-            <ListBox x:Name="uiTalkList" Height="80" Background="#50000000" BorderThickness="0" Foreground="White" FontSize="12" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel IsItemsHost="True" Orientation="Vertical" />
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
-                <ListBox.ItemTemplate>
-                    <DataTemplate >
-                        <Grid Height="23">
-                            <TextBlock Foreground="White" FontSize="15" Text="{Binding word}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        </Grid>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-            <Grid VerticalAlignment="Bottom">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="auto"/>
-            </Grid.ColumnDefinitions>
-            <TextBox x:Name="uiMsg" Background="#a0000000" BorderThickness="0" Foreground="White" FontSize="15" TextAlignment="Center"/>
-            <Button Grid.Column="1" x:Name="uiConnect" Content="  发送  " Width="{Binding Path=ActualWidth,ElementName=uiInputContainer}" FontSize="15" Click="uiConnect_Click"/>
-        </Grid>
+            <Grid Height="80">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+
+                <ListBox Visibility="Collapsed" x:Name="uiTalkList" Grid.RowSpan="2" Background="#50000000" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel IsItemsHost="True" Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate >
+                            <Grid Margin="0,2,0,2">
+                                <materialDesign:Card Height="20" Background="#50000000">
+                                    <TextBlock Foreground="White" FontSize="15" Text="{Binding word}" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                </materialDesign:Card>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <!-- 快速显示消息的面板-->
+                <Grid x:Name="uiQuickMsg" Margin="0,2,0,2" Grid.Row="1">
+                    <materialDesign:Card Height="20" Background="#50000000">
+                        <TextBlock x:Name="uiQuickMsgText" Foreground="White" FontSize="15" Text="" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    </materialDesign:Card>
+                </Grid>
+                
+            </Grid>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="uiMsg" Background="#a0000000" BorderThickness="0" Foreground="White" FontSize="15" TextAlignment="Center" LostFocus="uiMsg_LostFocus" GotFocus="uiMsg_GotFocus"/>
+                <Button Visibility="Collapsed" x:Name="uiMsgSend" Grid.Column="1" Content="  发送  " FontSize="15" Click="uiConnect_Click"/>
+            </Grid>
         </StackPanel>
 
     </Grid>

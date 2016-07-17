@@ -171,6 +171,15 @@ namespace BallanceOnlineClient {
                         life.SearchedData = data;
                         await life.SearchAgainAsync();
 
+                        if (inputTick == 2) {
+                            //超限了。。直接结束，后面用众数解决
+                            inputTick = 0;
+                            measureProgress += 1;
+                            uiLifeMeasure.Background = new SolidColorBrush(Color.FromArgb(80, 0, 255, 0));
+                            uiTestStep.Text = "请直接输入当前小节数到下部文本框中，按确认键。提示：当前小节数可能为：1";
+                            break;
+                        }
+
                         if (life.ResultCount <= 10) {
                             //可以结束了
                             inputTick = 0;
@@ -188,11 +197,12 @@ namespace BallanceOnlineClient {
                         unit.SearchedData = data;
                         await unit.SearchAgainAsync();
 
-                        if (inputTick + 2 == 6) {
+                        if (inputTick == 3) {
                             //超限了。。直接结束，后面用众数解决
                             uiUnitMeasure.Background = new SolidColorBrush(Color.FromArgb(80, 0, 255, 0));
                             uiTestStep.Text = "请按Esc退出直至退出至初始菜单，退出完成后按下部确认键";
                             willExit = true;
+                            break;
                         }
 
                         if (life.ResultCount <= 10) {

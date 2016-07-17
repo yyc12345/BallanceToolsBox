@@ -49,8 +49,6 @@ namespace BallanceOnlineClient {
 
             kh = new Hook();
 
-            tcpConnect = new TcpClientWithTimeout();
-
             gamePlayerList = new List<Player>();
             df = new DownloadFile();
             ms = new MapSetting();
@@ -122,7 +120,7 @@ namespace BallanceOnlineClient {
         /// </summary>
         /// <param name="head"></param>
         /// <param name="data"></param>
-        private void dataProcess(string head, byte[] data) {
+        public void dataProcess(string head, byte[] data) {
 
             switch (head) {
 
@@ -217,14 +215,6 @@ namespace BallanceOnlineClient {
                     PlayNow_playerDied(CombineAndSplitSign.ConvertToString(data));
                     break;
 
-                case ClientAndServerSign.Server + SocketSign.PlayerPaused:
-                    PlayNow_playerPaused(CombineAndSplitSign.ConvertToString(data));
-                    break;
-
-                case ClientAndServerSign.Server + SocketSign.PlayerContinue:
-                    PlayNow_playerContinue(CombineAndSplitSign.ConvertToString(data));
-                    break;
-
                 case ClientAndServerSign.Server + SocketSign.PlayerSuccess:
                     PlayNow_playerSuccess(CombineAndSplitSign.ConvertToString(data));
                     break;
@@ -288,8 +278,6 @@ namespace BallanceOnlineClient {
 
         public Action<string> PlayNow_playerDied;
         public Action<string> PlayNow_playerSuccess;
-        public Action<string> PlayNow_playerPaused;
-        public Action<string> PlayNow_playerContinue;
 
         public Action<string> PlayNow_teamDied;
 

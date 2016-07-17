@@ -31,6 +31,9 @@ namespace BallanceOnlineClient {
             gm = oldgm;
             gm.ChangeTransportWindow("WaitPlayer");
 
+            //set client
+            gm.dataGiveIn = new GameData(ref tc, gm.dataProcess);
+
             gm.WaitPlayer_addAllPlayer = new Action<StringGroup>(addAllPlayer);
             gm.WaitPlayer_addSinglePlayer = new Action<string>(addSinglePlayer);
             gm.WaitPlayer_newMessage = new Action<string>(newMessage);
@@ -39,48 +42,73 @@ namespace BallanceOnlineClient {
             //gm.kh.SetHook(false);
             uiPlayerList.ItemsSource = gm.gamePlayerList;
             talkList = new List<TalkListItem>();
+            uiTalkList.ItemsSource = talkList;
 
             this.Show();
 
         }
 
         public void addAllPlayer(StringGroup pList) {
-            uiPlayerList.ItemsSource = null;
 
-            var cache = pList.ToStringGroup();
-            foreach (string item in cache) {
-                gm.gamePlayerList.Add(new Player { PlayerIPAddress = item });
-            }
+            uiPlayerList.Dispatcher.Invoke(() =>
+            {
+                uiPlayerList.ItemsSource = null;
 
-            uiPlayerList.ItemsSource = gm.gamePlayerList;
+                var cache = pList.ToStringGroup();
+                foreach (string item in cache) {
+                    gm.gamePlayerList.Add(new Player { PlayerIPAddress = item });
+                }
+
+                uiPlayerList.ItemsSource = gm.gamePlayerList;
+
+            });
+
         }
 
         public void addSinglePlayer(string playerIP) {
-            uiPlayerList.ItemsSource = null;
+            uiPlayerList.Dispatcher.Invoke(() =>
+            {
+                uiPlayerList.ItemsSource = null;
 
-            gm.gamePlayerList.Add(new Player { PlayerIPAddress = playerIP });
+                gm.gamePlayerList.Add(new Player { PlayerIPAddress = playerIP });
 
-            uiPlayerList.ItemsSource = gm.gamePlayerList;
+                uiPlayerList.ItemsSource = gm.gamePlayerList;
+
+            });
+
         }
 
         public void deletePlayer(string playerIP) {
-            uiPlayerList.ItemsSource = null;
+            uiPlayerList.Dispatcher.Invoke(() =>
+            {
+                uiPlayerList.ItemsSource = null;
 
-            int index = 0;
-            foreach (Player item in gm.gamePlayerList) {
-                if(item.PlayerIPAddress==playerIP) { gm.gamePlayerList.RemoveAt(index); break; }
-                index++;
-            }
+                int index = 0;
+                foreach (Player item in gm.gamePlayerList) {
+                    if (item.PlayerIPAddress == playerIP) { gm.gamePlayerList.RemoveAt(index); break; }
+                    index++;
+                }
 
-            uiPlayerList.ItemsSource = gm.gamePlayerList;
+                uiPlayerList.ItemsSource = gm.gamePlayerList;
+
+            });
+
         }
 
         public void newMessage(string msg) {
-            uiTalkList.ItemsSource = null;
 
-            talkList.Add(new TalkListItem { word = msg });
+            uiTalkList.Dispatcher.Invoke(() =>
+            {
+                uiTalkList.ItemsSource = null;
+                talkList.Add(new TalkListItem { word = msg });
+                uiTalkList.ItemsSource = talkList;
+            });
 
-            uiTalkList.ItemsSource = talkList;
+            uiQuickMsgText.Dispatcher.Invoke(() =>
+            {
+                uiQuickMsgText.Text = msg;
+            });
+
         }
 
         public void turnToNewWindow() {
@@ -101,6 +129,29 @@ namespace BallanceOnlineClient {
             else MessageBox.Show("发送的消息不能为空");
         }
 
+        /// <summary>
+        /// 隐藏消息面板
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void uiMsg_LostFocus(object sender, RoutedEventArgs e) {
+            uiMsgSend.Visibility = Visibility.Collapsed;
+            uiTalkList.Visibility = Visibility.Collapsed;
+
+            uiQuickMsg.Visibility = Visibility.Visible;
+        }
+
+        /// <summary>
+        /// 显示消息面板
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void uiMsg_GotFocus(object sender, RoutedEventArgs e) {
+            uiMsgSend.Visibility = Visibility.Visible;
+            uiTalkList.Visibility = Visibility.Visible;
+
+            uiQuickMsg.Visibility = Visibility.Collapsed;
+        }
     }
 
 }

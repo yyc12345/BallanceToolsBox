@@ -4,7 +4,7 @@
     <StartArguments>D:\Ballance\ Mod1,Mod2,JxTeam,jjyTeam ShitBK NoiseBGM False sb</StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <StartArguments>D:\Ballance\ Mod1,Mod2,JxTeam,jjyTeam ShitBK NoiseBGM False</StartArguments>
+    <StartArguments>D:\Ballance\ Mod1,Mod2,JxTeam,jjyTeam ShitBK NoiseBGM False ddd</StartArguments>
   </PropertyGroup>
   <PropertyGroup>
     <PublishUrlHistory>publish\</PublishUrlHistory>

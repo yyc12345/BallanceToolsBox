@@ -35,6 +35,8 @@ namespace BallanceOnlineServer {
 
             gm = new GlobalManager();
 
+            uiPlayerList.ItemsSource = gm.clientPlayerList;
+
             var selectPort = new Random().Next(6000, 40000);
             uiPort.Text = selectPort.ToString();
 
@@ -46,7 +48,7 @@ namespace BallanceOnlineServer {
 
             globalListener.Start();
             globalListener.BeginAcceptTcpClient(new AsyncCallback(acceptCallback), globalListener);
-   
+
         }
 
         /// <summary>
@@ -55,6 +57,11 @@ namespace BallanceOnlineServer {
         /// <param name="ar"></param>
         private void acceptCallback(IAsyncResult ar) {
 
+            uiPlayerList.Dispatcher.Invoke(() =>
+            {
+                uiPlayerList.ItemsSource = null;
+            });
+
             TcpListener listen = (TcpListener)ar.AsyncState;
 
             //get client
@@ -62,24 +69,32 @@ namespace BallanceOnlineServer {
 
             //add to player list
             var newPlayer = new Player(ref client, gm.MainMessageProcess);
-            //boradcast
-            gm.allPlayerBroadcast(CombineAndSplitSign.Combine(ClientAndServerSign.Server, SocketSign.NewPlayer, newPlayer.PlayerIPAddress));
+            //all user boradcast
+            if (gm.clientPlayerList.Count != 0) {
+                gm.allPlayerBroadcast(CombineAndSplitSign.Combine(ClientAndServerSign.Server, SocketSign.NewPlayer, newPlayer.PlayerIPAddress));
+            }
+
             //single user boradcast
             var cache = new List<string>();
             cache.Add(newPlayer.PlayerIPAddress);
+            //add to list
+            gm.clientPlayerList.Add(newPlayer);
 
-            if (gm.clientPlayerList.Count == 0) { return; }
             foreach (Player item in gm.clientPlayerList) {
                 cache.Add(item.PlayerIPAddress);
             }
             //send
             newPlayer.gameData.SendData(CombineAndSplitSign.Combine(ClientAndServerSign.Server, SocketSign.ReturnAllPlayer, new StringGroup(cache, ",").ToString()));
-            //add to list
-            gm.clientPlayerList.Add(newPlayer);
+
 
             if (gm.clientPlayerList.Count >= 2) {
                 uiNext.IsEnabled = true;
             }
+
+            uiPlayerList.Dispatcher.Invoke(() =>
+            {
+                uiPlayerList.ItemsSource = gm.clientPlayerList;
+            });
 
             //开始下一次
             listen.BeginAcceptTcpClient(new AsyncCallback(acceptCallback), globalListener);
@@ -91,7 +106,7 @@ namespace BallanceOnlineServer {
         /// </summary>
         /// <param name="ip"></param>
         /// <param name="host"></param>
-        private void pingOut(string ip,Player host) {
+        private void pingOut(string ip, Player host) {
             uiPlayerList.ItemsSource = null;
             gm.clientPlayerList.Remove(host);
             gm.allPlayerBroadcast(CombineAndSplitSign.Combine(ClientAndServerSign.Server, SocketSign.DeletePlayer, ip));

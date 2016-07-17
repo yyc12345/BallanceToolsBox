@@ -76,15 +76,15 @@ namespace BallanceOnlineClient {
             //先取出组信息
             var groupMsg = new StringGroup(playerSplit[0], "#").ToStringGroup();
             if (groupMsg[0] == gm.ms.TeamAName) {
-                uiTeamAMark.Text = groupMsg[1];
-                uiTeamBMark.Text = groupMsg[4];
-                uiTeamAPP.Text = groupMsg[2];
-                uiTeamBPP.Text = groupMsg[5];
+                uiTeamAMark.Dispatcher.Invoke(() => { uiTeamAMark.Text = groupMsg[1]; });
+                uiTeamBMark.Dispatcher.Invoke(() => { uiTeamBMark.Text = groupMsg[4]; });
+                uiTeamAPP.Dispatcher.Invoke(() => { uiTeamAPP.Text = groupMsg[2]; });
+                uiTeamBPP.Dispatcher.Invoke(() => { uiTeamBPP.Text = groupMsg[5]; });
             } else {
-                uiTeamAMark.Text = groupMsg[4];
-                uiTeamBMark.Text = groupMsg[1];
-                uiTeamAPP.Text = groupMsg[5];
-                uiTeamBPP.Text = groupMsg[2];
+                uiTeamAMark.Dispatcher.Invoke(() => { uiTeamAMark.Text = groupMsg[4]; });
+                uiTeamBMark.Dispatcher.Invoke(() => { uiTeamBMark.Text = groupMsg[1]; });
+                uiTeamAPP.Dispatcher.Invoke(() => { uiTeamAPP.Text = groupMsg[5]; });
+                uiTeamBPP.Dispatcher.Invoke(() => { uiTeamBPP.Text = groupMsg[2]; });
             }
 
 
@@ -137,15 +137,17 @@ namespace BallanceOnlineClient {
             }
 
             //show
-            uiTeamAList.ItemsSource = teamAList;
-            uiTeamBList.ItemsSource = teamBList;
+            uiTeamAList.Dispatcher.Invoke(() => { uiTeamAList.ItemsSource = teamAList;});
+            uiTeamBList.Dispatcher.Invoke(() => { uiTeamBList.ItemsSource = teamBList; });
 
-            uiNewPlay.IsEnabled = true;
-            uiExit.IsEnabled = true;
+            uiNewPlay.Dispatcher.Invoke(() => { uiNewPlay.IsEnabled = true; });
+            uiExit.Dispatcher.Invoke(() => { uiExit.IsEnabled = true;});
 
         }
 
         private void uiNewPlay_Click(object sender, RoutedEventArgs e) {
+            gm.kh.UnHook();
+
             var newWin = new Login();
             var newgm = new GlobalManager("Login");
             newgm.SetMonitor(gm.markMonitor, gm.lifeMonitor, gm.unitMonitor);

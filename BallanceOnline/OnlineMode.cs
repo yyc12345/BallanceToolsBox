@@ -246,18 +246,18 @@ namespace BallanceOnline.Const {
         /// 客户端不使用
         /// </summary>
         public const string TeamDied = "TD";
-        /// <summary>
-        /// 服务器使用
-        /// 广播某人暂停。数据区格式：string 暂停玩家名
-        /// 客户端不使用
-        /// </summary>
-        public const string PlayerPaused = "PP";
-        /// <summary>
-        /// 服务器使用
-        /// 广播某人从暂停中恢复。数据区格式：string 恢复玩家名
-        /// 客户端不使用
-        /// </summary>
-        public const string PlayerContinue = "PC";
+        ///// <summary>
+        ///// 服务器使用
+        ///// 广播某人暂停。数据区格式：string 暂停玩家名
+        ///// 客户端不使用
+        ///// </summary>
+        //public const string PlayerPaused = "PP";
+        ///// <summary>
+        ///// 服务器使用
+        ///// 广播某人从暂停中恢复。数据区格式：string 恢复玩家名
+        ///// 客户端不使用
+        ///// </summary>
+        //public const string PlayerContinue = "PC";
         /// <summary>
         /// 服务器使用
         /// 广播某人完成。数据区格式：string 完成玩家名

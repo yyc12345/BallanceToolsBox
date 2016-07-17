@@ -4,121 +4,163 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BallanceOnlineClient"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d" Topmost="true" ShowInTaskbar="False"
         Title="LoadResources" Height="400" Width="500" AllowsTransparency="True" WindowStyle="None" Background="#50000000">
     <Grid>
 
-        <Grid VerticalAlignment="Top" Margin="0,20,0,0" Height="50" HorizontalAlignment="Center" Background="#50000000">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="60"/>
-                <ColumnDefinition Width="auto"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="2*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+        <Grid VerticalAlignment="Top" Margin="0,20,0,0" HorizontalAlignment="Center">
+            <materialDesign:Card Background="#50000000" Height="50">
+                <Grid>
 
-            <Grid Grid.RowSpan="2" Margin="0,0,10,0">
-                <Grid.Background>
-                    <ImageBrush ImageSource="mapIcon.png"/>
-                </Grid.Background>
-            </Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="60"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
 
-            <TextBlock x:Name="uiGameMapName" Foreground="White" FontSize="15" Grid.Column="1" Text="" VerticalAlignment="Center"/>
+                    <Grid Grid.RowSpan="2" Margin="0,0,10,0">
+                        <Grid.Background>
+                            <ImageBrush ImageSource="mapIcon.png"/>
+                        </Grid.Background>
+                    </Grid>
 
-            <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1">
-                <TextBlock Foreground="White" FontSize="12" Grid.Column="1" Text="游戏规则：" VerticalAlignment="Center"/>
-                <TextBlock x:Name="uiGameRule" Foreground="White" FontSize="12" Grid.Column="1" Text="" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                <TextBlock Foreground="White" FontSize="12" Grid.Column="1" Text="游戏模式：" VerticalAlignment="Center"/>
-                <TextBlock x:Name="uiGameMode" Foreground="White" FontSize="12" Grid.Column="1" Text="" VerticalAlignment="Center" Margin="0,0,10,0"/>
-            </StackPanel>
+                    <TextBlock x:Name="uiGameMapName" Foreground="White" FontSize="15" Grid.Column="1" Text="" VerticalAlignment="Center"/>
+
+                    <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1">
+                        <TextBlock Foreground="White" FontSize="12" Grid.Column="1" Text="游戏规则：" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="uiGameRule" Foreground="White" FontSize="12" Grid.Column="1" Text="" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                        <TextBlock Foreground="White" FontSize="12" Grid.Column="1" Text="游戏模式：" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="uiGameMode" Foreground="White" FontSize="12" Grid.Column="1" Text="" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                    </StackPanel>
+                </Grid>
+            </materialDesign:Card>
+
         </Grid>
 
-        <Grid Margin="50,100,50,0" VerticalAlignment="Top">
+        <Grid Margin="50,100,50,20">
             <Grid.RowDefinitions>
-                <RowDefinition Height="100"/>
                 <RowDefinition Height="auto"/>
-                <RowDefinition Height="100"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <ListBox x:Name="uiTeamAList" Margin="10,0,0,0" Grid.Column="1" Grid.Row="0" Background="#00000000" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+            <ListBox x:Name="uiTeamAList" Margin="0,10,10,0" Grid.Column="0" Grid.Row="1" Background="#00000000" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel IsItemsHost="True" />
+                        <WrapPanel IsItemsHost="True" Orientation="Vertical" />
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
                 <ListBox.ItemTemplate>
                     <DataTemplate >
-                        <Grid Width="100">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="2*"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-                            <Rectangle Stroke="White" Grid.RowSpan="2" Margin="1">
-                                <Rectangle.Effect >
-                                    <BlurEffect RenderingBias="Quality"/>
-                                </Rectangle.Effect>
-                                <Rectangle.Fill>
-                                    <ImageBrush ImageSource="mapIcon.png"/>
-                                </Rectangle.Fill>
-                            </Rectangle>
-                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <Ellipse Height="15" Width="15" Stroke="White" Fill="{Binding readyColor}" Margin="0,0,0,5" HorizontalAlignment="Center"/>
-                                <TextBlock Foreground="White" Grid.Row="0" FontSize="15" Text="{Binding PlayerName}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </StackPanel>
+                        <Grid>
+                            <materialDesign:Card Height="50" Background="#50000000">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
 
-                            <TextBlock TextWrapping="Wrap" Grid.Row="1" Foreground="White" FontSize="9" Text="{Binding DutyUnitToString}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <!-- ip and name-->
+                                    <Grid Grid.Row="0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="2*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <Ellipse Height="10" Width="10" Stroke="White" Fill="{Binding readyColor}" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                                            <TextBlock Foreground="White" FontSize="12" Text="{Binding PlayerName}" VerticalAlignment="Center"/>
+                                        </StackPanel>
+
+                                        <TextBlock Foreground="White" Grid.Column="1" FontSize="9" Text="{Binding PlayerIPAddress}" VerticalAlignment="Center"/>
+
+                                    </Grid>
+                                    <!-- mod-->
+                                    <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0,0,0">
+                                        <TextBlock Foreground="White" Grid.Column="1" FontSize="9" Text="Mod列表：" VerticalAlignment="Center"/>
+                                        <TextBlock Foreground="White" Grid.Column="1" FontSize="9" Text="{Binding ModListToString}" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                    <!-- duty-->
+                                    <StackPanel Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0,0,0">
+                                        <TextBlock Foreground="White" Grid.Column="1" FontSize="9" Text="负责的小节：" VerticalAlignment="Center"/>
+                                        <TextBlock Foreground="White" Grid.Column="1" FontSize="9" Text="{Binding DutyUnitToString}" VerticalAlignment="Center"/>
+                                    </StackPanel>
+
+                                </Grid>
+                            </materialDesign:Card>
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <ListBox x:Name="uiTeamBList" Margin="10,0,0,0" Grid.Column="1" Grid.Row="2" Background="#00000000" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+            <ListBox x:Name="uiTeamBList" Margin="10,10,0,0" Grid.Column="2" Grid.Row="1" Background="#00000000" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel IsItemsHost="True" />
+                        <WrapPanel IsItemsHost="True" Orientation="Vertical" />
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
                 <ListBox.ItemTemplate>
                     <DataTemplate >
-                        <Grid Width="100">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="2*"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-                            <Rectangle Stroke="White" Grid.RowSpan="2" Margin="1">
-                                <Rectangle.Effect >
-                                    <BlurEffect RenderingBias="Quality"/>
-                                </Rectangle.Effect>
-                                <Rectangle.Fill>
-                                    <ImageBrush ImageSource="mapIcon.png"/>
-                                </Rectangle.Fill>
-                            </Rectangle>
-                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <Ellipse Height="15" Width="15" Stroke="White" Fill="{Binding readyColor}" Margin="0,0,0,5" HorizontalAlignment="Center"/>
-                                <TextBlock Foreground="White" Grid.Row="0" FontSize="15" Text="{Binding PlayerName}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </StackPanel>
+                        <Grid>
+                            <materialDesign:Card Height="50" Background="#50000000">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
 
-                            <TextBlock TextWrapping="Wrap" Grid.Row="1" Foreground="White" FontSize="9" Text="{Binding DutyUnitToString}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <!-- ip and name-->
+                                    <Grid Grid.Row="0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="2*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <Ellipse Height="10" Width="10" Stroke="White" Fill="{Binding readyColor}" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                                            <TextBlock Foreground="White" FontSize="12" Text="{Binding PlayerName}" VerticalAlignment="Center"/>
+                                        </StackPanel>
+
+                                        <TextBlock Foreground="White" Grid.Column="1" FontSize="9" Text="{Binding PlayerIPAddress}" VerticalAlignment="Center"/>
+
+                                    </Grid>
+                                    <!-- mod-->
+                                    <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0,0,0">
+                                        <TextBlock Foreground="White" Grid.Column="1" FontSize="9" Text="Mod列表：" VerticalAlignment="Center"/>
+                                        <TextBlock Foreground="White" Grid.Column="1" FontSize="9" Text="{Binding ModListToString}" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                    <!-- duty-->
+                                    <StackPanel Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0,0,0">
+                                        <TextBlock Foreground="White" Grid.Column="1" FontSize="9" Text="负责的小节：" VerticalAlignment="Center"/>
+                                        <TextBlock Foreground="White" Grid.Column="1" FontSize="9" Text="{Binding DutyUnitToString}" VerticalAlignment="Center"/>
+                                    </StackPanel>
+
+                                </Grid>
+                            </materialDesign:Card>
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
 
             <TextBlock x:Name="uiTeamAName" Foreground="White" FontSize="15" Grid.Row="0" Grid.Column="0" Text="" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <TextBlock x:Name="uiTeamBName" Foreground="White" FontSize="15" Grid.Row="2" Grid.Column="0" Text="" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBlock x:Name="uiTeamBName" Foreground="White" FontSize="15" Grid.Row="0" Grid.Column="2" Text="" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
-            <TextBlock Foreground="White" FontSize="20" Grid.Row="1" Grid.ColumnSpan="2" Text="VS" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,5,0,5">
+            <TextBlock Foreground="White" FontSize="20" Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Text="VS" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,5,0,5">
                 <TextBlock.Effect>
                     <DropShadowEffect Direction="270" Color="#7FFFFF00" RenderingBias="Quality" ShadowDepth="0" BlurRadius="10"/>
                 </TextBlock.Effect>
             </TextBlock>
 
         </Grid>
-        
+
     </Grid>
 </Window>

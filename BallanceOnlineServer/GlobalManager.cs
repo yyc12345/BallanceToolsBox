@@ -130,9 +130,9 @@ namespace BallanceOnlineServer {
                     //判断游戏状态
 
                     /* 判定方法
-                     * 暂停：状态在正在游戏，数据保持不变<10次，且有命，时间数据不变。（放弃判断）
+                     * 暂停：状态在正在游戏，数据保持不变<20次，且有命，时间数据不变。（放弃判断）
                      * 继续：状态为暂停，数据有变动，同时清空数据不变标识符。（放弃判断）
-                     * 死亡：状态在正在游戏，数据不变>=10次，且命=0
+                     * 死亡：状态在正在游戏，数据不变>=20次，且命=0
                      * 成功：状态在正在游戏，时间减少，减少量>10
                      * */
 
@@ -142,7 +142,7 @@ namespace BallanceOnlineServer {
                     } else host.dataCache.dataCompareNotChangeCount = 0;
 
                     //先判断死亡
-                    if (host.dataCache.previousState == PlayerState.Playing && host.dataCache.dataCompareNotChangeCount >= 10 && host.NowLife == "0" && host.NowTime == host.dataCache.previousTime) {
+                    if (host.dataCache.previousState == PlayerState.Playing && host.dataCache.dataCompareNotChangeCount >= 20 && host.NowLife == "0" && host.NowTime == host.dataCache.previousTime) {
                         this.allPlayerBroadcast(CombineAndSplitSign.Combine(ClientAndServerSign.Server, SocketSign.PlayerDied, host.PlayerName));
                         host.NowState = PlayerState.Died;
 

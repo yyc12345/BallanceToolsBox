@@ -42,7 +42,7 @@ namespace BallanceOnlineClient.Local {
             globalHook = false;
             kh = new BaseHook();
             gameAllowKeys = new List<Keys> { Keys.Enter, Keys.Right, Keys.Left, Keys.Up, Keys.Down, Keys.Escape, Keys.Space, Keys.Shift };
-            talkNotAllowKeys = new List<Keys> { Keys.Enter, Keys.Right, Keys.Left, Keys.Up, Keys.Down, Keys.Space };
+            talkNotAllowKeys = new List<Keys> { Keys.Enter, Keys.Right, Keys.Left, Keys.Up, Keys.Down };
             hookFlag = false;
         }
 
@@ -164,17 +164,11 @@ namespace BallanceOnlineClient.Local {
 
     public class HookMouseAndKeyboard {
 
-        Process selectedProcess;
+        IntPtr selectedProcess;
 
         public HookMouseAndKeyboard() {
 
-            foreach (Process p in Process.GetProcesses()) {
-                if (p.ProcessName == "Player") { selectedProcess = p; }
-            }
-
-            if (selectedProcess == null) {
-                throw new NotImplementedException("Couldn't find process!");
-            }
+            selectedProcess = Win32.FindWindow(null, "Ballance");
 
         }
 
@@ -182,14 +176,14 @@ namespace BallanceOnlineClient.Local {
         /// 开始封锁
         /// </summary>
         public void Start() {
-            Win32.EnableWindow(selectedProcess.Handle, false);
+            Win32.EnableWindow(selectedProcess, false);
         }
 
         /// <summary>
         /// 解除封锁
         /// </summary>
         public void Stop() {
-            Win32.EnableWindow(selectedProcess.Handle, true);
+            Win32.EnableWindow(selectedProcess, true);
         }
     }
 
