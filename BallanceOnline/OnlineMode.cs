@@ -63,10 +63,12 @@ namespace BallanceOnline.Const {
     public class GamePrize {
         /// <summary>
         /// MVP
+        /// 胜利组的优秀者
         /// </summary>
         public const string MostValuablePlayer = "MVP";
         /// <summary>
         /// 球魂
+        /// 失败组的优秀者
         /// </summary>
         public const string BallSoul = "BS";
 
@@ -93,19 +95,25 @@ namespace BallanceOnline.Const {
         public const string AceShow = "全军覆没";
         /// <summary>
         /// 重生
-        /// 第一位获得第一个生命的人
+        /// 条件：第一位获得第一个生命的人
         /// </summary>
         public const string Reborn = "RB";
         public const string RebornSpeech = "Reborn";
-        public const string RebornShow = "获得第一条命";
+        public const string RebornShow = "重获新生";
         /// <summary>
         /// 时间
-        /// 第一位获得第一个时间的人
+        /// 条件：获得时间的人，时间增加
         /// </summary>
         public const string Time = "T";
         public const string TimeSpeech = "Time";
-        public const string TimeShow = "获得第一个分";
-
+        public const string TimeShow = "惜时如金";
+        /// <summary>
+        /// 通过
+        /// 条件：过盘点就给
+        /// </summary>
+        public const string Cross = "C";
+        public const string CrossSpeech = "Cross";
+        public const string CrossShow = "通过试炼";
 
     }
 
@@ -228,7 +236,7 @@ namespace BallanceOnline.Const {
         /// <summary>
         /// 服务器使用
         /// 提交当前游戏信息。数据区格式：SG 分隔符,
-        /// [游戏左下分数,游戏生命,当前小节数,奖励描述符,玩家名称]
+        /// [游戏左下分数,游戏生命,当前小节数,SG 奖励描述符 分隔符#,玩家名称]
         /// 客户端不使用
         /// </summary>
         public const string GameDataGiveOut = "GDGO";

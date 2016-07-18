@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using BallanceOnline;
 
-namespace BallanceOnlineServer {
+namespace BallanceOnlineServer.DataProcess {
     /// <summary>
     /// 分发地图类
     /// </summary>

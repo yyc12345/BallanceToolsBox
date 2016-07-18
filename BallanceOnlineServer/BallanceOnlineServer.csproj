@@ -69,12 +69,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="DataCache.cs" />
-    <Compile Include="GiveOutMapFile.cs" />
+    <Compile Include="DataProcess\DataCache.cs" />
+    <Compile Include="DataProcess\GiveOutMapFile.cs" />
+    <Compile Include="DataProcess\GlobalPrizeLog.cs" />
     <Compile Include="PlayerMark.xaml.cs">
       <DependentUpon>PlayerMark.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Timer.cs" />
+    <Compile Include="DataProcess\Timer.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

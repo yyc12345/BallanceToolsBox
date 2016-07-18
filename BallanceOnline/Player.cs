@@ -14,10 +14,10 @@ namespace BallanceOnline {
         public Player() {
             readyColor = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
             nowStateColor = new SolidColorBrush(Color.FromArgb(80, 0, 0, 0));
-            nowLife = "3";
-            nowTime = "1000";
+            nowLife = "";
+            nowTime = "";
             nowUnit = "1";
-            nowUnit = "1";
+            nowState = PlayerState.Playing;
             playerName = "";
 
         }
@@ -295,13 +295,47 @@ namespace BallanceOnline {
         /// </summary>
         public string FinallyMark { get { return finallyMark; } set { finallyMark = value; } }
         /// <summary>
-        /// 最终pp点数
+        /// 最终的hs/sr成绩，比较专用字符
+        /// </summary>
+        public int FinallyMarkCompareNumber {
+            get {
+                if (finallyMark != "") {
+                    if (finallyMark.Contains(".") == true) {
+
+                        //translate
+                        if (finallyMark.Contains(":")) {
+                            var result = finallyMark.Split(':');
+                            var result2 = result[1].Split('.');
+                            return int.Parse(result[0]) * 600 + int.Parse(result2[0]) * 10 + int.Parse(result2[1]);
+                        } else {
+                            var result = finallyMark.Split('.');
+                            return int.Parse(result[0]) * 10 + int.Parse(result[1]);
+                        }
+
+                    } else {
+                        return int.Parse(finallyMark);
+                    }
+                } else { return 0; }
+            }
+        }
+        /// <summary>
+        /// 最终pp点数，pp大约取值范围是0-10
         /// </summary>
         protected string finallyPP;
         /// <summary>
         /// 最终pp点数
         /// </summary>
         public string FinallyPP { get { return finallyPP; } set { finallyPP = value; } }
+        /// <summary>
+        /// 最终pp点数数字表达式
+        /// </summary>
+        public int FinallyPPNumber {
+            get {
+                if (finallyPP != "") {                   
+                        return int.Parse(finallyPP);
+                } else { return 0; }
+            }
+        }
         /// <summary>
         /// 最终的称号
         /// </summary>

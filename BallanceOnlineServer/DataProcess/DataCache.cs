@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BallanceOnlineServer {
+namespace BallanceOnlineServer.DataProcess {
     //处理获得的数据时候的所需要的临时数据
     public class DataCache {
 

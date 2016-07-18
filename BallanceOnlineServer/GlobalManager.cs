@@ -7,6 +7,7 @@ using BallanceOnline;
 using System.Net.Sockets;
 using BallanceOnline.Const;
 using System.Windows.Media;
+using BallanceOnlineServer.DataProcess;
 
 namespace BallanceOnlineServer {
 
@@ -18,6 +19,8 @@ namespace BallanceOnlineServer {
             clientPlayerList = new List<Player>();
             stopPing = false;
             ms = new MapSetting();
+            globalPrize = new GlobalPrizeLog();
+            nowFinishPlayerCount = 0;
 
             //自动ping
             Task.Run(() =>
@@ -81,10 +84,21 @@ namespace BallanceOnlineServer {
             }
         }
 
+        /// <summary>
+        /// 当前完成任务玩家数量
+        /// </summary>
+        private int nowFinishPlayerCount;
+
         #endregion
 
         #region 消息处理
 
+        /// <summary>
+        /// 主消息处理函数
+        /// </summary>
+        /// <param name="head"></param>
+        /// <param name="data"></param>
+        /// <param name="host"></param>
         public void MainMessageProcess(string head, byte[] data, Player host) {
 
             switch (head) {
@@ -112,12 +126,19 @@ namespace BallanceOnlineServer {
                     host.HistoryRankedRaceCount = cache2[2];
                     host.HistoryRelayRaceCount = cache2[3];
 
+                    //刷新
+                    flushPlayerList();
+
                     break;
 
                 case ClientAndServerSign.Client + SocketSign.PlayerIsReady:
                     //ready
                     host.playerIsReady();
                     this.allPlayerBroadcast(CombineAndSplitSign.Combine(ClientAndServerSign.Server, SocketSign.PlayerIsReady, host.PlayerName));
+
+                    //刷新
+                    flushPlayerList();
+
                     break;
 
                 case ClientAndServerSign.Client + SocketSign.GameDataTurnIn:
@@ -128,60 +149,100 @@ namespace BallanceOnlineServer {
                     host.NowState = "";
 
                     //判断游戏状态
+                    if (host.NowState == PlayerState.Success || host.NowState==PlayerState.Died) {
+                        //拒绝数据
+                        break;
+                    }
 
                     /* 判定方法
                      * 暂停：状态在正在游戏，数据保持不变<20次，且有命，时间数据不变。（放弃判断）
                      * 继续：状态为暂停，数据有变动，同时清空数据不变标识符。（放弃判断）
                      * 死亡：状态在正在游戏，数据不变>=20次，且命=0
-                     * 成功：状态在正在游戏，时间减少，减少量>10
+                     * 成功：状态在正在游戏，时间减少，减少量>20点
                      * */
 
                     //***********************判断状态
+
+                    //要传出的数据
+                    List<string> outPrize = new List<string>();
+
+
                     if (host.dataCache.previousState == PlayerState.Playing && host.NowTime == host.dataCache.previousTime) {
+                        //增加数据静止值
                         host.dataCache.dataCompareNotChangeCount++;
                     } else host.dataCache.dataCompareNotChangeCount = 0;
 
                     //先判断死亡
                     if (host.dataCache.previousState == PlayerState.Playing && host.dataCache.dataCompareNotChangeCount >= 20 && host.NowLife == "0" && host.NowTime == host.dataCache.previousTime) {
-                        this.allPlayerBroadcast(CombineAndSplitSign.Combine(ClientAndServerSign.Server, SocketSign.PlayerDied, host.PlayerName));
+
+                        //###########################成就-沉默#######################
+                        //不是一次性输出，可以多次输出
+                        //信息压入玩家队列传出
+                        outPrize.Add(GamePrize.Silence);
+                        //###########################成就#######################
                         host.NowState = PlayerState.Died;
+                        //增加完成任务数量人数
+                        nowFinishPlayerCount++;
 
                         //判断一波组死亡
                         if (this.ms.GameMode == GameMode.RelayRace) {
                             foreach (string item in host.DutyUnit) {
                                 if (int.Parse(item) >= int.Parse(host.NowUnit)) {
                                     //组死亡
+
+                                    //组死亡肯定包含上面已经死的人，所以完成人数--防止重复计算
+                                    nowFinishPlayerCount--;
+
+                                    //循环死亡
                                     foreach (Player item2 in this.clientPlayerList) {
                                         if (item2.PlayerGroupName == host.PlayerGroupName) {
                                             item2.NowState = PlayerState.Died;
+                                            //增加完成任务数量人数
+                                            nowFinishPlayerCount++;
+
+                                            //###########################成就-团灭#######################
+                                            if (this.globalPrize.Ace == false) {
+                                                //信息压入玩家队列传出
+                                                outPrize.Add(GamePrize.Ace);
+                                                this.globalPrize.Ace = true;
+                                            }
+                                            //###########################成就#######################
 
                                             //小节线最终写入
                                             item2.dataCache.AddUnitData(item2.NowTime, item2.NowLife);
-                                            //如果可以，停止计时器
-                                            if (this.ms.CountMode == CountMode.CrazySpeedRun || this.ms.CountMode == CountMode.SpeedRun) {
-                                                item2.gameTime.Stop();
-                                            }
+                                            //停止计时器
+                                            item2.gameTime.Stop();
                                         }
                                     }
 
                                     this.allPlayerBroadcast(CombineAndSplitSign.Combine(ClientAndServerSign.Server, SocketSign.TeamDied, host.PlayerGroupName));
                                 }
                             }
+                        }else {
+                            //不是组死亡
+                            //单独广播
+                            this.allPlayerBroadcast(CombineAndSplitSign.Combine(ClientAndServerSign.Server, SocketSign.PlayerDied, host.PlayerName));
                         }
                     }
 
 
                     //成功
-                    if (host.dataCache.previousState == PlayerState.Playing && (int.Parse(host.dataCache.previousTime) - int.Parse(host.NowTime)) > 10) {
+                    if (host.dataCache.previousState == PlayerState.Playing && (int.Parse(host.dataCache.previousTime) - int.Parse(host.NowTime)) > 20) {
                         this.allPlayerBroadcast(CombineAndSplitSign.Combine(ClientAndServerSign.Server, SocketSign.PlayerSuccess, host.PlayerName));
                         host.NowState = PlayerState.Success;
+                        //增加完成任务数量人数
+                        nowFinishPlayerCount++;
 
-                        //小节线最终写入
-                        host.dataCache.AddUnitData(host.NowTime, host.NowLife);
-                        //如果可以，停止计时器
-                        if (this.ms.CountMode == CountMode.CrazySpeedRun || this.ms.CountMode == CountMode.SpeedRun) {
-                            host.gameTime.Stop();
-                        }
+                        //小节线最终写入，用之前的数据写入，更加准确
+                        host.dataCache.AddUnitData(host.dataCache.previousTime, host.dataCache.previousLife);
+                        //停止计时器
+                        host.gameTime.Stop();
+                    }
+
+                    //判断计时器
+                    if (host.dataCache.previousTime == "") {
+                        //第一次，启动计时器
+                        host.gameTime.Start();
                     }
 
                     //判断小节线变动
@@ -190,22 +251,16 @@ namespace BallanceOnlineServer {
                             //刚开始，立即写入
                             host.dataCache.AddUnitData(host.NowTime, host.NowLife);
 
-                            //如果可以，开启计时器
-                            if (this.ms.CountMode == CountMode.CrazySpeedRun || this.ms.CountMode == CountMode.SpeedRun) {
-                                host.gameTime.Start();
-                            }
-
                         } else if (host.dataCache.previousUnit != host.NowUnit) {
                             //新小节
+                            //###########################成就-通过#######################
+                            //不是一次性成就
+                            //信息压入玩家队列传出
+                            outPrize.Add(GamePrize.Cross);
+                            //###########################成就#######################
                             host.dataCache.AddUnitData(host.NowTime, host.NowLife);
                         }//否则不写入
                     }
-
-                    //判断写入
-                    host.dataCache.previousLife = host.NowLife;
-                    host.dataCache.previousTime = host.NowTime;
-                    host.dataCache.previousUnit = host.NowUnit;
-                    if (host.NowState != "") host.dataCache.previousState = host.NowState;
 
 
                     //暂停
@@ -216,45 +271,86 @@ namespace BallanceOnlineServer {
 
                     //**********************************************************************todo:判断成就
 
+                    //###########################成就-第一次死亡#######################
+                    if (this.globalPrize.FirstBlood == false) {
+                        //信息压入玩家队列传出
+                        if (int.Parse(host.NowLife) < int.Parse(host.dataCache.previousLife)) {
+                            outPrize.Add(GamePrize.FirstBlood);
+                            this.globalPrize.FirstBlood = true;
+                        }
+                    }
+                    //###########################成就#######################
+                    //###########################成就-重生#######################
+                    //非一次性成就
+                    //信息压入玩家队列传出
+                    if (int.Parse(host.NowLife) > int.Parse(host.dataCache.previousLife)) {
+                        outPrize.Add(GamePrize.Reborn);
+                    }
+                    //###########################成就#######################
+                    //###########################成就-时间#######################
+                    //非一次性成就
+                    //信息压入玩家队列传出
+                    if (int.Parse(host.NowTime) > int.Parse(host.dataCache.previousTime)) {
+                        outPrize.Add(GamePrize.Time);
+                    }
+                    //###########################成就#######################
 
+
+                    //判断写入
+                    host.dataCache.previousLife = host.NowLife;
+                    host.dataCache.previousTime = host.NowTime;
+                    host.dataCache.previousUnit = host.NowUnit;
+                    if (host.NowState != "") host.dataCache.previousState = host.NowState;
+
+                    //传出
+                    this.allPlayerBroadcast(CombineAndSplitSign.Combine(
+                        ClientAndServerSign.Server,
+                        SocketSign.GameDataGiveOut,
+                        new StringGroup(new List<string> {
+                            host.dataCache.previousTime,
+                            host.dataCache.previousLife,
+                            host.dataCache.previousUnit,
+                            outPrize.Count == 0 ? "" : new StringGroup(outPrize,"#").ToString(),
+                            host.PlayerName
+                        }, ",").ToString()));
+
+                    //提醒服务器注意
+                    if (nowFinishPlayerCount == clientPlayerList.Count) {
+                        //可能都完成了
+                        warnPlayerFinishGame();
+                    }
+
+                    //刷新
+                    flushPlayerList();
 
                     break;
-
-
 
             }
 
         }
-
 
         #endregion
 
         #region 消息委托
 
         //全局掉线
-        Action<string, Player> pingOut;
-
-        #region Mainwindow
-
-        #endregion
-
-        #region TaskGiveOut
-
-        #endregion
-
-        #region GameIsRuning
-
-        #endregion
-
-        #region PlayerMark
-
-        #endregion
+        public Action<string, Player> pingOut;
+        //刷新用户列表
+        public Action flushPlayerList;
+        //提醒用户可能都完成了游戏
+        public Action warnPlayerFinishGame;
 
         #endregion
 
         #region 地图数据
 
         public MapSetting ms;
+
+        #endregion
+
+        #region 全局成就
+
+        GlobalPrizeLog globalPrize;
 
         #endregion
 

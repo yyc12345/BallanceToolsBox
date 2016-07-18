@@ -344,6 +344,8 @@
                 </StackPanel>
             </materialDesign:Card>
         </Grid>
-        
+
+        <TextBlock x:Name="uiCheckAndClose" Visibility="Collapsed" Foreground="Black" Width="150" FontSize="15" Text="成员可能都已完成游戏，请检查并结束游戏" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,5"/>
+
     </Grid>
 </Window>

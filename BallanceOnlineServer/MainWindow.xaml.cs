@@ -34,9 +34,12 @@ namespace BallanceOnlineServer {
         private void Window_Loaded(object sender, RoutedEventArgs e) {
 
             gm = new GlobalManager();
+            gm.pingOut = new Action<string, Player>(pingOut);
 
+            //set list
             uiPlayerList.ItemsSource = gm.clientPlayerList;
 
+            //set ip and port
             var selectPort = new Random().Next(6000, 40000);
             uiPort.Text = selectPort.ToString();
 
@@ -107,10 +110,13 @@ namespace BallanceOnlineServer {
         /// <param name="ip"></param>
         /// <param name="host"></param>
         private void pingOut(string ip, Player host) {
-            uiPlayerList.ItemsSource = null;
-            gm.clientPlayerList.Remove(host);
-            gm.allPlayerBroadcast(CombineAndSplitSign.Combine(ClientAndServerSign.Server, SocketSign.DeletePlayer, ip));
-            uiPlayerList.ItemsSource = gm.clientPlayerList;
+            uiPlayerList.Dispatcher.Invoke(() =>
+            {
+                uiPlayerList.ItemsSource = null;
+                gm.clientPlayerList.Remove(host);
+                gm.allPlayerBroadcast(CombineAndSplitSign.Combine(ClientAndServerSign.Server, SocketSign.DeletePlayer, ip));
+                uiPlayerList.ItemsSource = gm.clientPlayerList;
+            });
         }
 
         /// <summary>

@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using BallanceOnline;
 using BallanceOnline.Const;
+using BallanceOnlineServer.DataProcess;
 
 namespace BallanceOnlineServer {
     /// <summary>
@@ -35,11 +36,25 @@ namespace BallanceOnlineServer {
         public void Show(GlobalManager oldgm) {
             gm = oldgm;
 
+            gm.flushPlayerList = new Action(FlushPlayerList);
+            gm.warnPlayerFinishGame = new Action(WarnPlayerHaveFinishedGame);
+
             //set resources
             uiPlayerList.ItemsSource = gm.clientPlayerList;
             nowStep = 0;
 
             this.Show();
+        }
+
+        /// <summary>
+        /// 刷新函数
+        /// </summary>
+        public void FlushPlayerList() {
+            uiPlayerList.Dispatcher.Invoke(() =>
+            {
+                uiPlayerList.ItemsSource = null;
+                uiPlayerList.ItemsSource = gm.clientPlayerList;
+            });
         }
 
         #region 确认地图
@@ -263,6 +278,12 @@ namespace BallanceOnlineServer {
             uiShowMark.IsEnabled = true;
         }
 
+        /// <summary>
+        /// 提醒用户可能都完成了操作
+        /// </summary>
+        private void WarnPlayerHaveFinishedGame() {
+            uiCheckAndClose.Dispatcher.Invoke(() => { uiCheckAndClose.Visibility = Visibility.Visible; });
+        }
 
         #endregion
 
@@ -278,6 +299,7 @@ namespace BallanceOnlineServer {
         private void uiShowMark_Click(object sender, RoutedEventArgs e) {
 
             uiShowMark.IsEnabled = false;
+            uiCheckAndClose.Visibility = Visibility.Collapsed;
 
             gm.allPlayerBroadcast(CombineAndSplitSign.Combine(ClientAndServerSign.Server, SocketSign.GameEnd, ""));
 
@@ -285,8 +307,8 @@ namespace BallanceOnlineServer {
 
             Task.Run(() =>
             {
-                List<string> outputData = new List<string>();
 
+                //============================================================获取每个用户的成绩
                 foreach (Player item in gm.clientPlayerList) {
                     //读取所有小节信息
                     var allDutyUnitData = item.dataCache.ReturnData();
@@ -311,16 +333,13 @@ namespace BallanceOnlineServer {
                     } else { item.FinallyMark = fMark.ToString(); }
 
                     item.FinallyPP = fPP.ToString();
-                    //todo:称号判定
+                    //称号判定后文写
                     item.FinallyPrize = "";
-
+                    //写入小节数据表
                     item.PlayerUnitPrize = selectDutyUnitData.ToList<PlayerUnitData>();
 
-                    outputData.Add((new StringGroup(cacheUnitString, "@").ToString()) + "#" + item.FinallyMark + "#" + item.FinallyPP + "#" + item.FinallyPrize + "#" + item.PlayerName);
-
                 }
-
-                //分析一下组数据
+                //============================================================分析一下组数据
                 //input to list
                 var teamAList = new List<Player>();
                 var teamBList = new List<Player>();
@@ -331,17 +350,84 @@ namespace BallanceOnlineServer {
 
                 foreach (IGrouping<string, Player> item in result) {
                     if (item.Key == gm.ms.TeamAName) {
-                        foreach (Player item2 in item) {
-                            teamAList.Add(item2);
+                        //组内排序
+                        //分析规则
+                        IOrderedEnumerable<Player> cacheA;
+                        switch (gm.ms.CountMode) {
+                            case CountMode.HighScore:
+                                //由于比较分数，降序排序，加上pp以体现技术
+                                cacheA = from q in item.ToList<Player>()
+                                         orderby q.FinallyMarkCompareNumber descending
+                                         select q;
+                                break;
+                            case CountMode.SpeedRun:
+                                //由于比较速度，升序排序，减去pp以体现技术
+                                cacheA = from q in item.ToList<Player>()
+                                         orderby q.FinallyMarkCompareNumber ascending
+                                         select q;
+                                break;
+                            case CountMode.CrazyHighScore:
+                                cacheA = from q in item.ToList<Player>()
+                                         orderby (q.FinallyMarkCompareNumber + q.FinallyPPNumber * 100) descending
+                                         select q;
+                                break;
+                            case CountMode.CrazySpeedRun:
+                                cacheA = from q in item.ToList<Player>()
+                                         orderby (q.FinallyMarkCompareNumber - q.FinallyPPNumber * 100) ascending
+                                         select q;
+                                break;
+
+                            default:
+                                //防止出意外，实际上不可能
+                                cacheA = from q in item.ToList<Player>()
+                                         orderby q.FinallyMarkCompareNumber descending
+                                         select q;
+                                break;
                         }
+
+                        teamAList = cacheA.ToList<Player>();
                     } else {
-                        foreach (Player item2 in item) {
-                            teamBList.Add(item2);
+                        //组内排序
+                        //分析规则
+                        IOrderedEnumerable<Player> cacheB;
+                        switch (gm.ms.CountMode) {
+                            case CountMode.HighScore:
+                                //由于比较分数，降序排序，加上pp以体现技术
+                                cacheB = from q in item.ToList<Player>()
+                                         orderby q.FinallyMarkCompareNumber descending
+                                         select q;
+                                break;
+                            case CountMode.SpeedRun:
+                                //由于比较速度，升序排序，减去pp以体现技术
+                                cacheB = from q in item.ToList<Player>()
+                                         orderby q.FinallyMarkCompareNumber ascending
+                                         select q;
+                                break;
+                            case CountMode.CrazyHighScore:
+                                cacheB = from q in item.ToList<Player>()
+                                         orderby (q.FinallyMarkCompareNumber + q.FinallyPPNumber * 100) descending
+                                         select q;
+                                break;
+                            case CountMode.CrazySpeedRun:
+                                cacheB = from q in item.ToList<Player>()
+                                         orderby (q.FinallyMarkCompareNumber - q.FinallyPPNumber * 100) ascending
+                                         select q;
+                                break;
+
+                            default:
+                                //防止出意外，实际上不可能
+                                cacheB = from q in item.ToList<Player>()
+                                         orderby q.FinallyMarkCompareNumber descending
+                                         select q;
+                                break;
                         }
+
+                        teamBList = cacheB.ToList<Player>();
                     }
                 }
 
-                //show team result
+                //========================calculation team result
+                //pp
                 int teamAPP = 0, teamBPP = 0;
                 foreach (var item in teamAList) {
                     teamAPP += int.Parse(item.FinallyPP);
@@ -352,35 +438,139 @@ namespace BallanceOnlineServer {
                 }
                 teamBPP = teamBPP / teamBList.Count;
 
+                //mark
+                //只计算成功的，防止sr模式出现死亡就成功bug
                 string teamAMark, teamBMark;
-                if (gm.ms.CountMode == BallanceOnline.Const.CountMode.SpeedRun || gm.ms.CountMode == BallanceOnline.Const.CountMode.CrazySpeedRun) {
-                    var markAList = from item in teamAList
-                                    select DateToSecound(item.FinallyMark);
-                    var markBList = from item in teamBList
-                                    select DateToSecound(item.FinallyMark);
+                IEnumerable<int> markAList, markBList;
+                //确认选项
+                switch (gm.ms.CountMode) {
+                    case CountMode.HighScore:
+                        markAList = from item in teamAList
+                                    where item.NowState == PlayerState.Success
+                                    select item.FinallyMarkCompareNumber;
+                        markBList = from item in teamBList
+                                    where item.NowState == PlayerState.Success
+                                    select item.FinallyMarkCompareNumber;
 
-                    teamAMark = SecoundToDate(Average(markAList, teamAList.Count));
-                    teamBMark = SecoundToDate(Average(markBList, teamBList.Count));
+                        break;
+                    case CountMode.SpeedRun:
+                        markAList = from item in teamAList
+                                    where item.NowState == PlayerState.Success
+                                    select item.FinallyMarkCompareNumber;
+                        markBList = from item in teamBList
+                                    where item.NowState == PlayerState.Success
+                                    select item.FinallyMarkCompareNumber;
+
+                        break;
+                    case CountMode.CrazyHighScore:
+                        markAList = from item in teamAList
+                                    where item.NowState == PlayerState.Success
+                                    select (item.FinallyMarkCompareNumber + item.FinallyPPNumber * 100);
+                        markBList = from item in teamBList
+                                    where item.NowState == PlayerState.Success
+                                    select (item.FinallyMarkCompareNumber + item.FinallyPPNumber * 100);
+
+                        break;
+                    case CountMode.CrazySpeedRun:
+                        markAList = from item in teamAList
+                                    where item.NowState == PlayerState.Success
+                                    select (item.FinallyMarkCompareNumber - item.FinallyPPNumber * 100);
+                        markBList = from item in teamBList
+                                    where item.NowState == PlayerState.Success
+                                    select (item.FinallyMarkCompareNumber - item.FinallyPPNumber * 100);
+
+                        break;
+                    default:
+                        //防止出错，实际上不可能
+                        markAList = from item in teamAList
+                                    where item.NowState == PlayerState.Success
+                                    select item.FinallyMarkCompareNumber;
+                        markBList = from item in teamBList
+                                    where item.NowState == PlayerState.Success
+                                    select item.FinallyMarkCompareNumber;
+
+                        break;
+                }
+                //set mark
+                //设置为0,防止团灭挂掉
+                if (markAList.Any() == true) {
+                    //有元素
+                    //取平均保留2位小数
+                    teamAMark = markAList.Average().ToString("F2");
                 } else {
-                    var markAList = from item in teamAList
-                                    select item.FinallyMark;
-                    var markBList = from item in teamBList
-                                    select item.FinallyMark;
-
-                    teamAMark = SecoundToDate(Average(markAList, teamAList.Count));
-                    teamBMark = SecoundToDate(Average(markBList, teamBList.Count));
+                    //没元素
+                    teamAMark = "0";
+                }
+                if (markAList.Any() == true) {
+                    //有元素
+                    //取平均保留2位小数
+                    teamBMark = markBList.Average().ToString("F2");
+                } else {
+                    //没元素
+                    teamBMark = "0";
                 }
 
                 var cache = new List<string> { gm.ms.TeamAName, teamAMark, teamAPP.ToString(), gm.ms.TeamBName, teamBMark, teamBPP.ToString() };
 
-                //广播数据
+                //========================分别区分比较，进行mvp和球魂的确认
+                //比较组赢
+                //已经排序完毕，第一位即时得分最高者
+                //先区分团灭的情况
+                if (teamAMark == "0" && teamBMark == "0") {
+                    //全团灭
+                    teamAList[0].FinallyPrize = GamePrize.BallSoul;
+                    teamBList[0].FinallyPrize = GamePrize.BallSoul;
+                } else if (teamAMark == "0") {
+                    //a团灭
+                    teamAList[0].FinallyPrize = GamePrize.BallSoul;
+                    teamBList[0].FinallyPrize = GamePrize.MostValuablePlayer;
+                } else if (teamBMark == "0") {
+                    //b团灭
+                    teamAList[0].FinallyPrize = GamePrize.MostValuablePlayer;
+                    teamBList[0].FinallyPrize = GamePrize.BallSoul;
+
+
+                    //========都存在，比分数
+                } else if (int.Parse(teamAMark) > int.Parse(teamBMark)) {
+                    //a赢
+                    teamAList[0].FinallyPrize = GamePrize.MostValuablePlayer;
+                    teamBList[0].FinallyPrize = GamePrize.BallSoul;
+                } else if (int.Parse(teamAMark) < int.Parse(teamBMark)) {
+                    //b赢
+                    teamAList[0].FinallyPrize = GamePrize.BallSoul;
+                    teamBList[0].FinallyPrize = GamePrize.MostValuablePlayer;
+                } else {
+                    //平局
+                    teamAList[0].FinallyPrize = GamePrize.MostValuablePlayer;
+                    teamBList[0].FinallyPrize = GamePrize.MostValuablePlayer;
+                }
+
+                //============================================================输出成员的小节数据
+                //每个用户每小节成绩的列表
+                List<string> outputData = new List<string>();
+
+                foreach (Player item in gm.clientPlayerList) {
+
+                    //后文用于传输数据的列表
+                    List<string> cacheUnitString = new List<string>();
+
+                    foreach (var i in item.PlayerUnitPrize) {
+                        cacheUnitString.Add(i.Mark + "%" + i.PerfomancePoint + "%" + i.Unit);
+                    }
+
+                    //out put
+                    outputData.Add((new StringGroup(cacheUnitString, "@").ToString()) + "#" + item.FinallyMark + "#" + item.FinallyPP + "#" + item.FinallyPrize + "#" + item.PlayerName);
+
+                }
+
+                //============================================================广播数据
                 gm.allPlayerBroadcast(CombineAndSplitSign.Combine(ClientAndServerSign.Server,
                     SocketSign.AllPlayerGameData,
                     new StringGroup(cache, "#").ToString() + "," + new StringGroup(outputData, ",").ToString()));
 
-                //关闭连接
+                //============================================================关闭连接
                 gm.stopPing = true;
-                foreach(Player item in gm.clientPlayerList) {
+                foreach (Player item in gm.clientPlayerList) {
                     item.gameData.Dispose();
                 }
 
@@ -391,37 +581,40 @@ namespace BallanceOnlineServer {
         }
 
         //************************************************************组评判要用的3个函数
-        private string Average(IEnumerable<string> list, int count) {
-            int sum = 0;
-            foreach (string item in list) {
-                sum += int.Parse(item);
-            }
 
-            return (sum / count).ToString();
-        }
 
-        public string DateToSecound(string date) {
-            if (date.Contains(":")) {
-                var result = date.Split(':');
-                var result2 = result[1].Split('.');
-                return (int.Parse(result[0]) * 600 + int.Parse(result2[0]) * 10 + int.Parse(result2[1])).ToString();
-            } else {
-                var result = date.Split('.');
-                return (int.Parse(result[0]) * 10 + int.Parse(result[1])).ToString();
-            }
+        //现在无用的时间转换函数
+        //private string Average(IEnumerable<int> list, int count) {
+        //    int sum = 0;
+        //    foreach (int item in list) {
+        //        sum += item;
+        //    }
 
-        }
+        //    return (sum / count).ToString();
+        //}
 
-        public string SecoundToDate(string S_secound) {
-            int secound = int.Parse(S_secound);
+        //public string DateToSecound(string date) {
+        //    if (date.Contains(":")) {
+        //        var result = date.Split(':');
+        //        var result2 = result[1].Split('.');
+        //        return (int.Parse(result[0]) * 600 + int.Parse(result2[0]) * 10 + int.Parse(result2[1])).ToString();
+        //    } else {
+        //        var result = date.Split('.');
+        //        return (int.Parse(result[0]) * 10 + int.Parse(result[1])).ToString();
+        //    }
 
-            if ((secound / 600) <= 0) {
-                //没上分钟
-                return (secound / 10).ToString() + "." + (secound % 10).ToString();
-            } else {
-                return (secound / 600).ToString() + ":" + (secound / 10).ToString() + "." + (secound % 10).ToString();
-            }
-        }
+        //}
+
+        //public string SecoundToDate(string S_secound) {
+        //    int secound = int.Parse(S_secound);
+
+        //    if ((secound / 600) <= 0) {
+        //        //没上分钟
+        //        return (secound / 10).ToString() + "." + (secound % 10).ToString();
+        //    } else {
+        //        return (secound / 600).ToString() + ":" + (secound / 10).ToString() + "." + (secound % 10).ToString();
+        //    }
+        //}
 
         #endregion
 

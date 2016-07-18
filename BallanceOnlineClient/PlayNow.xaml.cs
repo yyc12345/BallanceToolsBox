@@ -112,7 +112,7 @@ namespace BallanceOnlineClient {
 
                //此时=15
                //显示负责的关卡
-               foreach(Player item in gm.gamePlayerList) {
+               foreach (Player item in gm.gamePlayerList) {
                    if (item.PlayerName == gm.gameSettings.playerName) {
                        uiNoticeText.Dispatcher.Invoke(() => { uiNoticeText.Text = "你的任务：完成" + item.DutyUnitToString + "小节，请在这些小节好好表现"; });
                        speakStart.SpeakAsync("鼓足干劲，力争上游");
@@ -166,8 +166,8 @@ namespace BallanceOnlineClient {
                                uiTimerContainer.Dispatcher.Invoke(() => { uiTimerContainer.Visibility = Visibility.Collapsed; });
                                overCount = true;
                            } else {
-                           uiTimer.Dispatcher.Invoke(() => { uiTimer.Text = similarityCount.ToString(); });
-                           uiTimerContainer.Dispatcher.Invoke(() => { uiTimerContainer.Visibility = Visibility.Visible; });
+                               uiTimer.Dispatcher.Invoke(() => { uiTimer.Text = similarityCount.ToString(); });
+                               uiTimerContainer.Dispatcher.Invoke(() => { uiTimerContainer.Visibility = Visibility.Visible; });
                            }
 
                        } else {
@@ -264,7 +264,9 @@ namespace BallanceOnlineClient {
                     item.NowUnit = cache[2];
 
                     //压入成就宣布队列
-                    prizeLine.Enqueue(new PrizeStructure { PlayerName = cache[3], PrizeName = cache[4] });
+                    if (cache[4] != "") {
+                        prizeLine.Enqueue(new PrizeStructure { PlayerName = cache[3], PrizeName = cache[4] });
+                    }
 
                     return;
                 }
