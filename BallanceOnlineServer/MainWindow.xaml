@@ -19,18 +19,20 @@
         <ListBox x:Name="uiPlayerList" Background="#00000000" BorderThickness="0" Margin="20,50,20,50">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <WrapPanel IsItemsHost="True" Orientation="Vertical" />
+                    <StackPanel Orientation="Vertical" IsItemsHost="True" />
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <materialDesign:Card Height="50" Margin="0,10,0,0">
-                        <TextBlock Foreground="Black" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" Text="{Binding PlayerIPAddress}"/>
-                    </materialDesign:Card>
+                    <Grid>
+                        <materialDesign:Card Height="50" Margin="0,5,0,5" Width="{Binding Path=ActualWidth, ElementName=uiPlayerList}">
+                            <TextBlock Foreground="Black" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{Binding PlayerIPAddress}"/>
+                        </materialDesign:Card>
+                    </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <Button x:Name="uiNext" Content="准备开始" IsEnabled="False" Width="100" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,5" Click="uiNext_Click"/>
+        <Button x:Name="uiNext" Content="准备开始" Width="100" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,5" Click="uiNext_Click"/>
     </Grid>
 </Window>

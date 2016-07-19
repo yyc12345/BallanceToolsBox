@@ -57,7 +57,7 @@
             <ListBox x:Name="uiTeamAList" Margin="0,5,0,0" Grid.Column="0" Grid.Row="1" Background="#00000000" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel IsItemsHost="True" />
+                        <StackPanel Orientation="Vertical" IsItemsHost="True" />
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
                 <ListBox.ItemTemplate>
@@ -101,7 +101,7 @@
             <ListBox x:Name="uiTeamBList" Margin="0,5,0,0" Grid.Column="2" Grid.Row="1" Background="#00000000" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel IsItemsHost="True" />
+                        <StackPanel Orientation="Vertical" IsItemsHost="True" />
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
                 <ListBox.ItemTemplate>

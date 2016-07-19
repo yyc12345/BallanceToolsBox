@@ -409,7 +409,6 @@ namespace BallanceOnlineClient {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void uiMsg_GotFocus(object sender, RoutedEventArgs e) {
-            uiMsgSend.Visibility = Visibility.Visible;
             uiTalkList.Visibility = Visibility.Visible;
 
             uiQuickMsg.Visibility = Visibility.Collapsed;
@@ -421,7 +420,6 @@ namespace BallanceOnlineClient {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void uiMsg_LostFocus(object sender, RoutedEventArgs e) {
-            uiMsgSend.Visibility = Visibility.Collapsed;
             uiTalkList.Visibility = Visibility.Collapsed;
 
             uiQuickMsg.Visibility = Visibility.Visible;

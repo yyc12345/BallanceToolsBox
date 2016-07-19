@@ -50,8 +50,7 @@ namespace BallanceOnlineClient {
 
         public void addAllPlayer(StringGroup pList) {
 
-            uiPlayerList.Dispatcher.Invoke(() =>
-            {
+            uiPlayerList.Dispatcher.Invoke(() => {
                 uiPlayerList.ItemsSource = null;
 
                 var cache = pList.ToStringGroup();
@@ -66,8 +65,7 @@ namespace BallanceOnlineClient {
         }
 
         public void addSinglePlayer(string playerIP) {
-            uiPlayerList.Dispatcher.Invoke(() =>
-            {
+            uiPlayerList.Dispatcher.Invoke(() => {
                 uiPlayerList.ItemsSource = null;
 
                 gm.gamePlayerList.Add(new Player { PlayerIPAddress = playerIP });
@@ -79,8 +77,7 @@ namespace BallanceOnlineClient {
         }
 
         public void deletePlayer(string playerIP) {
-            uiPlayerList.Dispatcher.Invoke(() =>
-            {
+            uiPlayerList.Dispatcher.Invoke(() => {
                 uiPlayerList.ItemsSource = null;
 
                 int index = 0;
@@ -97,15 +94,13 @@ namespace BallanceOnlineClient {
 
         public void newMessage(string msg) {
 
-            uiTalkList.Dispatcher.Invoke(() =>
-            {
+            uiTalkList.Dispatcher.Invoke(() => {
                 uiTalkList.ItemsSource = null;
                 talkList.Add(new TalkListItem { word = msg });
                 uiTalkList.ItemsSource = talkList;
             });
 
-            uiQuickMsgText.Dispatcher.Invoke(() =>
-            {
+            uiQuickMsgText.Dispatcher.Invoke(() => {
                 uiQuickMsgText.Text = msg;
             });
 
@@ -135,7 +130,6 @@ namespace BallanceOnlineClient {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void uiMsg_LostFocus(object sender, RoutedEventArgs e) {
-            uiMsgSend.Visibility = Visibility.Collapsed;
             uiTalkList.Visibility = Visibility.Collapsed;
 
             uiQuickMsg.Visibility = Visibility.Visible;
@@ -147,7 +141,6 @@ namespace BallanceOnlineClient {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void uiMsg_GotFocus(object sender, RoutedEventArgs e) {
-            uiMsgSend.Visibility = Visibility.Visible;
             uiTalkList.Visibility = Visibility.Visible;
 
             uiQuickMsg.Visibility = Visibility.Collapsed;

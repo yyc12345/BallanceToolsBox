@@ -30,6 +30,10 @@ namespace BallanceOnlineServer {
         GlobalManager gm;
 
         TcpListener globalListener;
+        /// <summary>
+        /// 指示是否即将退出
+        /// </summary>
+        bool willBack;
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
 
@@ -38,6 +42,8 @@ namespace BallanceOnlineServer {
 
             //set list
             uiPlayerList.ItemsSource = gm.clientPlayerList;
+            //set back
+            willBack = false;
 
             //set ip and port
             var selectPort = new Random().Next(6000, 40000);
@@ -60,42 +66,44 @@ namespace BallanceOnlineServer {
         /// <param name="ar"></param>
         private void acceptCallback(IAsyncResult ar) {
 
-            uiPlayerList.Dispatcher.Invoke(() =>
-            {
+            //检测退出的回调
+            if (willBack==true) { return; }
+
+            uiPlayerList.Dispatcher.Invoke(() => {
                 uiPlayerList.ItemsSource = null;
             });
 
             TcpListener listen = (TcpListener)ar.AsyncState;
 
             //get client
-            TcpClient client = listen.EndAcceptTcpClient(ar);
+            this.Dispatcher.Invoke(() => {
+                TcpClient client = listen.EndAcceptTcpClient(ar);
 
-            //add to player list
-            var newPlayer = new Player(ref client, gm.MainMessageProcess);
-            //all user boradcast
-            if (gm.clientPlayerList.Count != 0) {
+                //add to player list
+                var newPlayer = new Player(ref client, gm.MainMessageProcess);
+                //all user boradcast
                 gm.allPlayerBroadcast(CombineAndSplitSign.Combine(ClientAndServerSign.Server, SocketSign.NewPlayer, newPlayer.PlayerIPAddress));
-            }
 
-            //single user boradcast
-            var cache = new List<string>();
-            cache.Add(newPlayer.PlayerIPAddress);
-            //add to list
-            gm.clientPlayerList.Add(newPlayer);
+                //single user boradcast
+                var cache = new List<string>();
+                //add to list
+                gm.clientPlayerList.Add(newPlayer);
 
-            foreach (Player item in gm.clientPlayerList) {
-                cache.Add(item.PlayerIPAddress);
-            }
-            //send
-            newPlayer.gameData.SendData(CombineAndSplitSign.Combine(ClientAndServerSign.Server, SocketSign.ReturnAllPlayer, new StringGroup(cache, ",").ToString()));
+                foreach (Player item in gm.clientPlayerList) {
+                    cache.Add(item.PlayerIPAddress);
+                }
+                //send
+                newPlayer.gameData.SendData(CombineAndSplitSign.Combine(ClientAndServerSign.Server, SocketSign.ReturnAllPlayer, new StringGroup(cache, ",").ToString()));
 
 
-            if (gm.clientPlayerList.Count >= 2) {
-                uiNext.IsEnabled = true;
-            }
-
-            uiPlayerList.Dispatcher.Invoke(() =>
-            {
+                if (gm.clientPlayerList.Count >= 2) {
+                    uiNext.Dispatcher.Invoke(() => {
+                        uiNext.IsEnabled = true;
+                    });
+                }
+            });
+           
+            uiPlayerList.Dispatcher.Invoke(() => {
                 uiPlayerList.ItemsSource = gm.clientPlayerList;
             });
 
@@ -110,8 +118,7 @@ namespace BallanceOnlineServer {
         /// <param name="ip"></param>
         /// <param name="host"></param>
         private void pingOut(string ip, Player host) {
-            uiPlayerList.Dispatcher.Invoke(() =>
-            {
+            uiPlayerList.Dispatcher.Invoke(() => {
                 uiPlayerList.ItemsSource = null;
                 gm.clientPlayerList.Remove(host);
                 gm.allPlayerBroadcast(CombineAndSplitSign.Combine(ClientAndServerSign.Server, SocketSign.DeletePlayer, ip));
@@ -125,6 +132,10 @@ namespace BallanceOnlineServer {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void uiNext_Click(object sender, RoutedEventArgs e) {
+            willBack = true;
+
+            //停止接受
+            globalListener.Stop();
             //让客户端切换
             gm.allPlayerBroadcast(CombineAndSplitSign.Combine(ClientAndServerSign.Server, SocketSign.OrderTurnIn, ""));
             //自身切换

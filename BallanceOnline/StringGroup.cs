@@ -56,6 +56,7 @@ namespace BallanceOnline {
         /// <param name="value">字符</param>
         /// <param name="splitValue">分割字符</param>
         public StringGroup(ArrayList value, string splitValue) {
+            _sourceString = "";
             foreach (object a in value) {
                 string cache = a.ToString();
                 if (_sourceString == "") { _sourceString = cache; } else {
@@ -72,6 +73,7 @@ namespace BallanceOnline {
         /// <param name="value">字符</param>
         /// <param name="splitValue">分割字符</param>
         public StringGroup(List<string> value, string splitValue) {
+            _sourceString = "";
             foreach (string a in value) {
                 if (_sourceString == "") { _sourceString = a; } else {
                     _sourceString += splitValue;

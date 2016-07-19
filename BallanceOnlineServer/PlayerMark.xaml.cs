@@ -44,14 +44,15 @@ namespace BallanceOnlineServer {
             nowStep = 0;
 
             this.Show();
+
         }
+
 
         /// <summary>
         /// 刷新函数
         /// </summary>
         public void FlushPlayerList() {
-            uiPlayerList.Dispatcher.Invoke(() =>
-            {
+            uiPlayerList.Dispatcher.Invoke(() => {
                 uiPlayerList.ItemsSource = null;
                 uiPlayerList.ItemsSource = gm.clientPlayerList;
             });
@@ -144,6 +145,8 @@ namespace BallanceOnlineServer {
                 uiGiveOutTask.IsEnabled = true;
 
                 nowStep++;
+            }else {
+                MessageBox.Show("某些信息您为填写完整");
             }
 
         }
@@ -194,8 +197,7 @@ namespace BallanceOnlineServer {
             nowStep++;
 
             //异步发送
-            Task.Run(() =>
-            {
+            Task.Run(() => {
 
                 //发送基本信息
                 foreach (Player item in gm.clientPlayerList) {
@@ -219,10 +221,9 @@ namespace BallanceOnlineServer {
                 }
 
                 //发送地图
-                var sendMap = new GiveOutMapFile(uiMapPath.Text, (byte[] data) =>
-                 {
-                     gm.allPlayerBroadcast(data);
-                 });
+                var sendMap = new GiveOutMapFile(uiMapPath.Text, (byte[] data) => {
+                    gm.allPlayerBroadcast(data);
+                });
 
                 sendMap.Start();
 
@@ -305,8 +306,7 @@ namespace BallanceOnlineServer {
 
             MessageBox.Show("游戏已结束，分发成绩需要一段时间，请等待");
 
-            Task.Run(() =>
-            {
+            Task.Run(() => {
 
                 //============================================================获取每个用户的成绩
                 foreach (Player item in gm.clientPlayerList) {

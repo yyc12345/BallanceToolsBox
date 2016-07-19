@@ -15,10 +15,10 @@
             </materialDesign:Card>
         </Grid>
 
-        <ListBox x:Name="uiPlayerList" Margin="100,120,100,50" Background="#00000000" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+        <ListBox x:Name="uiPlayerList" Margin="100,120,100,60" Background="#00000000" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <WrapPanel IsItemsHost="True" Orientation="Vertical" />
+                    <StackPanel Orientation="Vertical" IsItemsHost="True" />
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
@@ -69,8 +69,8 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBox x:Name="uiMsg" Background="#a0000000" BorderThickness="0" Foreground="White" FontSize="15" TextAlignment="Center" LostFocus="uiMsg_LostFocus" GotFocus="uiMsg_GotFocus"/>
-                <Button Visibility="Collapsed" x:Name="uiMsgSend" Grid.Column="1" Content="  发送  " FontSize="15" Click="uiConnect_Click"/>
+                <TextBox x:Name="uiMsg" Background="#a0000000" BorderThickness="0" Foreground="White" FontSize="15" LostFocus="uiMsg_LostFocus" GotFocus="uiMsg_GotFocus"/>
+                <Button x:Name="uiMsgSend" Grid.Column="1" Content="  发送  " FontSize="15" Click="uiConnect_Click"/>
             </Grid>
         </StackPanel>
 

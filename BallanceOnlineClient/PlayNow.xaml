@@ -28,7 +28,7 @@
             <ListBox x:Name="uiTeamAList" Grid.Row="1" Grid.Column="1" Background="#00000000" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel IsItemsHost="True" />
+                        <StackPanel Orientation="Vertical" IsItemsHost="True" />
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
                 <ListBox.ItemTemplate>
@@ -87,7 +87,7 @@
             <ListBox x:Name="uiTeamBList" Grid.Row="1" Grid.Column="1" Background="#00000000" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel IsItemsHost="True" />
+                        <StackPanel Orientation="Vertical" IsItemsHost="True" />
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
                 <ListBox.ItemTemplate>
@@ -185,8 +185,8 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBox x:Name="uiMsg" Background="#a0000000" BorderThickness="0" Foreground="White" FontSize="15" TextAlignment="Center" GotFocus="uiMsg_GotFocus" LostFocus="uiMsg_LostFocus"/>
-                <Button Visibility="Collapsed" x:Name="uiMsgSend" Grid.Column="1" Content="  发送  " FontSize="15" Click="uiMsgSend_Click"/>
+                <TextBox x:Name="uiMsg" Background="#a0000000" BorderThickness="0" Foreground="White" FontSize="15" GotFocus="uiMsg_GotFocus" LostFocus="uiMsg_LostFocus"/>
+                <Button x:Name="uiMsgSend" Grid.Column="1" Content="  发送  " FontSize="15" Click="uiMsgSend_Click"/>
             </Grid>
         </StackPanel>
 
