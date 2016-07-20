@@ -76,6 +76,9 @@
       <DependentUpon>PlayerMark.xaml</DependentUpon>
     </Compile>
     <Compile Include="DataProcess\Timer.cs" />
+    <Compile Include="SetUnitToggleButton.xaml.cs">
+      <DependentUpon>SetUnitToggleButton.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -90,6 +93,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="PlayerMark.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SetUnitToggleButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

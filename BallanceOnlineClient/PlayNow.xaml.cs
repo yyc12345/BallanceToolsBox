@@ -398,9 +398,10 @@ namespace BallanceOnlineClient {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void uiMsgSend_Click(object sender, RoutedEventArgs e) {
-            if (uiMsg.Text != "")
-                gm.dataGiveIn.SendData(CombineAndSplitSign.Combine(BallanceOnline.Const.ClientAndServerSign.Client, BallanceOnline.Const.SocketSign.Message, uiMsg.Text));
-            else MessageBox.Show("发送的消息不能为空");
+            if (uiMsg.Text != "") {
+gm.dataGiveIn.SendData(CombineAndSplitSign.Combine(BallanceOnline.Const.ClientAndServerSign.Client, BallanceOnline.Const.SocketSign.Message, uiMsg.Text));
+                uiMsg.Text = "";
+            } else MessageBox.Show("发送的消息不能为空");
         }
 
         /// <summary>

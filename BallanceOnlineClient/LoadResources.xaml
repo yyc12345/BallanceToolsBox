@@ -61,7 +61,7 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate >
                         <Grid>
-                            <materialDesign:Card Height="50" Background="#50000000">
+                            <materialDesign:Card Height="50" Background="#50000000" Width="{Binding Path=ActualWidth, ElementName=uiTeamAList}">
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="*"/>
@@ -110,7 +110,7 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate >
                         <Grid>
-                            <materialDesign:Card Height="50" Background="#50000000">
+                            <materialDesign:Card Height="50" Background="#50000000" Width="{Binding Path=ActualWidth, ElementName=uiTeamBList}">
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="*"/>

@@ -34,7 +34,7 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate >
                         <Grid Margin="0,2,0,2">
-                            <materialDesign:Card Height="60" Background="#50000000">
+                            <materialDesign:Card Height="60" Background="#50000000" Width="{Binding Path=ActualWidth, ElementName=uiTeamAList}">
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="*"/>
@@ -93,7 +93,7 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate >
                         <Grid Margin="0,2,0,2">
-                            <materialDesign:Card Height="60" Background="#50000000">
+                            <materialDesign:Card Height="60" Background="#50000000" Width="{Binding Path=ActualWidth, ElementName=uiTeamBList}">
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="*"/>
@@ -158,15 +158,13 @@
                 <ListBox Visibility="Collapsed" x:Name="uiTalkList" Grid.RowSpan="2" Background="#50000000" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <WrapPanel IsItemsHost="True" Orientation="Vertical" />
+                            <StackPanel Orientation="Vertical" IsItemsHost="True" />
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
                     <ListBox.ItemTemplate>
                         <DataTemplate >
-                            <Grid Margin="0,2,0,2">
-                                <materialDesign:Card Height="20" Background="#50000000">
-                                    <TextBlock Foreground="White" FontSize="15" Text="{Binding word}" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                </materialDesign:Card>
+                            <Grid Margin="0,2,0,2" Height="20">
+                                <TextBlock Foreground="White" FontSize="15" Text="{Binding word}" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                             </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>

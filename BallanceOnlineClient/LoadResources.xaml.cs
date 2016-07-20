@@ -164,10 +164,12 @@ namespace BallanceOnlineClient {
         }
 
         public void turnToNewWindow() {
-            var newWin = new PlayNow();
-            newWin.Show(gm);
+            this.Dispatcher.Invoke(() => {
+                var newWin = new PlayNow();
+                newWin.Show(gm);
 
-            this.Close();
+                this.Close();
+            });
         }
 
     }

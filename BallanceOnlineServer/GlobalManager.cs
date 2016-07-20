@@ -23,31 +23,31 @@ namespace BallanceOnlineServer {
             nowFinishPlayerCount = 0;
 
             //自动ping
-            Task.Run(() =>
-            {
+            //Task.Run(() =>
+            //{
 
-                while (true) {
+            //    while (true) {
 
-                    if (stopPing == true) { break; }
+            //        if (stopPing == true) { break; }
 
-                    if (clientPlayerList.Count != 0) {
-                        foreach (Player item in clientPlayerList) {
+            //        if (clientPlayerList.Count != 0) {
+            //            foreach (Player item in clientPlayerList) {
 
-                            if (item.PingCount > 4) {
-                                //超时，掉线
-                                pingOut(item.PlayerIPAddress, item);
-                                continue;
-                            }
+            //                if (item.PingCount > 4) {
+            //                    //超时，掉线
+            //                    pingOut(item.PlayerIPAddress, item);
+            //                    continue;
+            //                }
 
-                            item.gameData.SendData(CombineAndSplitSign.Combine(ClientAndServerSign.Server, SocketSign.Ping, ""));
-                            item.PingCount++;
-                        }
-                    }
+            //                item.gameData.SendData(CombineAndSplitSign.Combine(ClientAndServerSign.Server, SocketSign.Ping, ""));
+            //                item.PingCount++;
+            //            }
+            //        }
 
-                    System.Threading.Thread.Sleep(60000);
-                }
+            //        System.Threading.Thread.Sleep(60000);
+            //    }
 
-            });
+            //});
 
         }
 
@@ -362,6 +362,37 @@ namespace BallanceOnlineServer {
     public class Player : BallanceOnline.Player {
 
         public Player(ref TcpClient inputClient, Action<string, byte[], Player> replay) {
+            //对原构造函数继承
+
+            playerIPAddress = "";
+            playerName = "";
+
+            modList = new List<string>();
+            backgroundName = "";
+            bgmName = "";
+
+            historyFailCount = "";
+            historyRankedRaceCount = "";
+            historyRelayRaceCount = "";
+            historyWinCount = "";
+
+            dutyUnit = new List<string>();
+            playerGroupName = "";
+
+            readyColor = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
+
+            nowLife = "";
+            nowTime = "";
+            nowUnit = "1";
+            nowState = PlayerState.Playing;
+            nowStateColor = new SolidColorBrush(Color.FromArgb(80, 0, 0, 0));
+
+            playerUnitPrize = new List<PlayerUnitData>();
+            finallyMark = "";
+            finallyPP = "";
+            finallyPrize = "";
+
+            //=================================自己的初始化
             gameData = new GameData(ref inputClient, this.replyInsider);
             replyEx = new Action<string, byte[], Player>(replay);
 
@@ -375,6 +406,9 @@ namespace BallanceOnlineServer {
 
 
             groupColor = new SolidColorBrush(Color.FromArgb(80, 0, 0, 0));
+
+
+
         }
 
         #region 数据传输部分

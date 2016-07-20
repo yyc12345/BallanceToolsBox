@@ -19,7 +19,7 @@
         <ListBox x:Name="uiPlayerList" Background="#00000000" BorderThickness="0" Margin="20,50,20,50">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <StackPanel Orientation="Vertical" IsItemsHost="True" />
+                    <WrapPanel IsItemsHost="True" Orientation="Vertical" />
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>

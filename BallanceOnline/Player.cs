@@ -12,13 +12,34 @@ namespace BallanceOnline {
     public class Player {
 
         public Player() {
+
+            playerIPAddress = "";
+            playerName = "";
+
+            modList = new List<string>();
+            backgroundName = "";
+            bgmName = "";
+
+            historyFailCount = "";
+            historyRankedRaceCount = "";
+            historyRelayRaceCount = "";
+            historyWinCount = "";
+
+            dutyUnit = new List<string>();
+            playerGroupName = "";
+
             readyColor = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
-            nowStateColor = new SolidColorBrush(Color.FromArgb(80, 0, 0, 0));
+
             nowLife = "";
             nowTime = "";
             nowUnit = "1";
             nowState = PlayerState.Playing;
-            playerName = "";
+            nowStateColor = new SolidColorBrush(Color.FromArgb(80, 0, 0, 0));
+
+            playerUnitPrize = new List<PlayerUnitData>();
+            finallyMark = "";
+            finallyPP = "";
+            finallyPrize = "";
 
         }
 
@@ -71,7 +92,12 @@ namespace BallanceOnline {
         /// <summary>
         /// mod列表字符串表达式，用,分割
         /// </summary>
-        public string ModListToString { get { return new StringGroup(modList, ",").ToString(); } }
+        public string ModListToString {
+            get {
+                if (modList.Count != 0) return new StringGroup(modList, ",").ToString();
+                else return "";
+            }
+        }
         /// <summary>
         /// 背景名
         /// </summary>
@@ -147,13 +173,18 @@ namespace BallanceOnline {
         /// </summary>
         public string DutyUnitToString {
             get {
-                return new StringGroup(dutyUnit, ",").ToString();
+                if (dutyUnit.Count != 0) return new StringGroup(dutyUnit, ",").ToString();
+                else return "";
             }
         }
         /// <summary>
         /// 需要完成任务的数量
         /// </summary>
-        public int DutyUnitCount { get { return dutyUnit.Count; } }
+        public int DutyUnitCount {
+            get {
+                return dutyUnit.Count;
+            }
+        }
         /// <summary>
         /// 当前完成的任务数量
         /// </summary>
@@ -331,8 +362,8 @@ namespace BallanceOnline {
         /// </summary>
         public int FinallyPPNumber {
             get {
-                if (finallyPP != "") {                   
-                        return int.Parse(finallyPP);
+                if (finallyPP != "") {
+                    return int.Parse(finallyPP);
                 } else { return 0; }
             }
         }

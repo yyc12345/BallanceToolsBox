@@ -120,16 +120,16 @@
         <ListBox x:Name="uiPlayerList" Background="#00000000" BorderThickness="0" Margin="20,190,20,50" MouseDoubleClick="uiPlayerList_MouseDoubleClick">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <StackPanel Orientation="Vertical" IsItemsHost="True" />
+                    <WrapPanel IsItemsHost="True" Orientation="Vertical" />
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <materialDesign:Card Height="350">
-                        <Grid Background="#50000000">
+                    <materialDesign:Card Height="350" Width="{Binding Path=ActualWidth, ElementName=uiPlayerList}">
+                        <Grid Background="{Binding groupColor}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="2*"/>
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="150"/>
@@ -143,7 +143,7 @@
                                 </Grid.ColumnDefinitions>
 
                                 <StackPanel Orientation="Horizontal" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                    <Ellipse Fill="{Binding groupColor}" Stroke="White" Width="15" Height="15" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                                    <Ellipse Fill="{Binding readyColor}" Stroke="White" Width="15" Height="15" Margin="0,0,10,0" VerticalAlignment="Center"/>
                                     <TextBlock Foreground="Black" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,5,0,0" Text="{Binding PlayerName}"/>
                                 </StackPanel>
 
@@ -153,6 +153,7 @@
 
                             <Grid Grid.Row="1">
                                 <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
                                     <RowDefinition Height="*"/>
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
@@ -165,6 +166,10 @@
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="10,0,0,0" VerticalAlignment="Center">
                                     <TextBlock Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Text="Mod列表："/>
+                                    <TextBlock Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding ModListToString}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="10,0,0,0" VerticalAlignment="Center">
+                                    <TextBlock Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Text="负责小节列表："/>
                                     <TextBlock Foreground="Black" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding DutyUnitToString}"/>
                                 </StackPanel>
 
@@ -248,7 +253,7 @@
 
                                 </Grid>
 
-                                <ListBox Grid.Row="2" Background="#00000000" ItemsSource="{Binding PlayerUnitPrize}" BorderThickness="0,1,0,0" BorderBrush="White" >
+                                <ListBox x:Name="uiUnitContainer" Grid.Row="2" Background="#00000000" ItemsSource="{Binding PlayerUnitPrize}" BorderThickness="0,1,0,0" BorderBrush="White" >
                                     <ListBox.ItemsPanel>
                                         <ItemsPanelTemplate>
                                             <WrapPanel IsItemsHost="True" Orientation="Vertical" />
@@ -256,7 +261,7 @@
                                     </ListBox.ItemsPanel>
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
-                                            <materialDesign:Card Height="50">
+                                            <materialDesign:Card Height="50" Width="{Binding Path=ActualWidth, ElementName=uiUnitContainer}">
                                                 <Grid>
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="*"/>
@@ -304,7 +309,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             
-            <materialDesign:Card Height="300" Grid.Row="1" Grid.Column="1">
+            <materialDesign:Card Grid.Row="1" Grid.Column="1">
                 <StackPanel Orientation="Vertical" Margin="10">
                     
                     <Grid VerticalAlignment="Center" Grid.Column="1">
@@ -331,15 +336,18 @@
                         </Grid.ColumnDefinitions>
 
                         <TextBlock Foreground="Black" FontSize="15" Text="负责的小节：" VerticalAlignment="Center"/>
-                        <TextBox x:Name="uiSetDuty" Grid.Column="1" IsReadOnly="True" VerticalAlignment="Center"/>
-                        <Button Grid.Column="2" Content="," Width="40" Margin="10,0,0,0" VerticalAlignment="Center" ToolTip="点此输入小节号"/>
+                        <TextBox x:Name="uiSetDuty" Grid.Column="1" VerticalAlignment="Center" IsReadOnly="True"/>
+                        <Button Grid.Column="2" Content="输入" Width="60" Margin="10,0,0,0" VerticalAlignment="Center" Click="Button_Click_2"/>
 
                     </Grid>
 
-                    <TextBlock Text="负责的小节使用 , （英文）分割，小节号从1起始。" Foreground="Red" FontSize="15" Margin="0,10,0,0"/>
-                    <TextBlock Text="当接力赛时，请确保组内人员要将地图小节全部负责完毕，不得遗漏，" Foreground="Red" FontSize="15"/>
-                    <TextBlock Text="也不得多人负责一小节。排位赛请将所有小节写入。示例：1,2,3,4,5" Foreground="Red" FontSize="15"/>
-
+                    <TextBlock Text="负责的小节请在下方勾选并点击 输入 即可。" Foreground="Red" FontSize="15" Margin="0,10,0,10"/>
+                    
+                    <!-- 装载关卡选择器的容器-->
+                    <ScrollViewer Height="120">
+                        <WrapPanel x:Name="uiUnitSelectorContainer" Orientation="Horizontal"/>
+                    </ScrollViewer>
+                   
                     <Button Content="确认数据" Width="100" Margin="0,50,0,0" HorizontalAlignment="Center" Click="Button_Click_1"/>
                 </StackPanel>
             </materialDesign:Card>

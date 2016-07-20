@@ -21,8 +21,7 @@ namespace BallanceOnlineClient {
             needTransportWindowTitle = needWindow;
             transportWindowFlag = true;
 
-            Thread windowT = new Thread(new ThreadStart(() =>
-            {
+            Thread windowT = new Thread(new ThreadStart(() => {
 
                 while (true) {
 
@@ -160,7 +159,6 @@ namespace BallanceOnlineClient {
                     break;
 
                 case ClientAndServerSign.Server + SocketSign.OrderTurnIn:
-                    WaitPlayer_turnToNewWindow();
                     //返回数据
                     var cache2 = new ArrayList {
                         new StringGroup(gameSettings.ModList, "#").ToString(),
@@ -175,6 +173,8 @@ namespace BallanceOnlineClient {
                     dataGiveIn.SendData(CombineAndSplitSign.Combine(ClientAndServerSign.Client, SocketSign.InformationTurnIn, new StringGroup(cache2, ",").ToString()));
 
                     nowPage += 1;
+
+                    WaitPlayer_turnToNewWindow();
 
                     break;
 

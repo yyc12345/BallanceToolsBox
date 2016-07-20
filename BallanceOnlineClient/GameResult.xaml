@@ -62,8 +62,8 @@
                 </ListBox.ItemsPanel>
                 <ListBox.ItemTemplate>
                     <DataTemplate >
-                        <Grid>
-                            <materialDesign:Card Background="#50000000">
+                        <Grid Margin="0,5,0,5">
+                            <materialDesign:Card Background="#50000000" Width="{Binding Path=ActualWidth, ElementName=uiTeamAList}">
                                 <StackPanel Orientation="Vertical">
 
                                     <Grid Margin="5">
@@ -106,8 +106,8 @@
                 </ListBox.ItemsPanel>
                 <ListBox.ItemTemplate>
                     <DataTemplate >
-                        <Grid>
-                            <materialDesign:Card Background="#50000000">
+                        <Grid Margin="0,5,0,5">
+                            <materialDesign:Card Background="#50000000" Width="{Binding Path=ActualWidth, ElementName=uiTeamBList}">
                                 <StackPanel Orientation="Vertical">
 
                                     <Grid Margin="5">

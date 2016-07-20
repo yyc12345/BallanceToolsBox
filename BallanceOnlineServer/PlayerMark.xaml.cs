@@ -28,6 +28,8 @@ namespace BallanceOnlineServer {
 
         GlobalManager gm;
 
+        List<SetUnitToggleButton> unitSelector;
+
         /// <summary>
         /// 当前进行的步骤0=确认地图 1=确认任务 2=正在游戏 3=输出结果
         /// </summary>
@@ -41,6 +43,7 @@ namespace BallanceOnlineServer {
 
             //set resources
             uiPlayerList.ItemsSource = gm.clientPlayerList;
+            unitSelector = new List<SetUnitToggleButton>();
             nowStep = 0;
 
             this.Show();
@@ -96,19 +99,23 @@ namespace BallanceOnlineServer {
                 gm.ms.TeamBName = uiGroupBName.Text;
 
                 //set map name
-                var cache = new StringGroup(uiMapPath.Text, @"\").ToStringGroup();
-                string cache2 = cache[cache.Length - 1];
+                //todo:不知道为何要用双斜杠，不然出错
+                //分开文件，文件夹
+                var cache = new StringGroup(uiMapPath.Text, @"\\").ToStringGroup();
+                //分开名字，扩展名
+                var cache2 = cache[cache.Length - 1].Split('.');
+                string cache3 = cache2[cache2.Length - 2];
 
-                cache2 = cache2.Replace(",", "");
-                cache2 = cache2.Replace("#", "");
-                cache2 = cache2.Replace("@", "");
-                cache2 = cache2.Replace("%", "");
+                cache3 = cache3.Replace(",", "");
+                cache3 = cache3.Replace("#", "");
+                cache3 = cache3.Replace("@", "");
+                cache3 = cache3.Replace("%", "");
 
-                if (cache2.Length == 0) {
-                    cache2 = "UnknowMap";
+                if (cache3.Length == 0) {
+                    cache3 = "UnknowMap";
                 }
 
-                gm.ms.MapName = cache2;
+                gm.ms.MapName = cache3;
 
                 gm.ms.MapMD5 = uiMapMD5.Text;
                 switch (uiGameMode.SelectedIndex) {
@@ -144,8 +151,26 @@ namespace BallanceOnlineServer {
                 uiSetMap.IsEnabled = false;
                 uiGiveOutTask.IsEnabled = true;
 
+                uiGameMode.IsEnabled = false;
+                uiCountMode.IsEnabled = false;
+
+                uiUnitCount.IsEnabled = false;
+
+                //set unit selector
+                for (int i = 0; i < uiUnitCount.Value; i++) {
+                    var temp = new SetUnitToggleButton();
+
+                    temp.Description = "第" + (i + 1).ToString() + "小节";
+                    temp.IsChecked = false;
+                    temp.Margin = new Thickness(15, 5, 15, 5);
+
+                    //add to ui and core
+                    uiUnitSelectorContainer.Children.Add(temp);
+                    unitSelector.Add(temp);
+                }
+
                 nowStep++;
-            }else {
+            } else {
                 MessageBox.Show("某些信息您为填写完整");
             }
 
@@ -228,7 +253,10 @@ namespace BallanceOnlineServer {
                 sendMap.Start();
 
                 //发完了
-                uiRunGame.IsEnabled = true;
+                uiRunGame.Dispatcher.Invoke(() => {
+                    uiRunGame.IsEnabled = true;
+                });
+
 
             });
 
@@ -240,6 +268,10 @@ namespace BallanceOnlineServer {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void Button_Click_1(object sender, RoutedEventArgs e) {
+
+            //check
+            if (uiSetDuty.Text == "") { MessageBox.Show("您没有填写小节分配表，不得退出"); return; }
+
             //set group
             switch (uiSetGroup.SelectedIndex) {
                 case 0:
@@ -256,6 +288,32 @@ namespace BallanceOnlineServer {
             gm.clientPlayerList[uiPlayerList.SelectedIndex].DutyUnit = new StringGroup(uiSetDuty.Text, ",").ToList();
 
             uiSet.Visibility = Visibility.Collapsed;
+
+            //刷新
+            FlushPlayerList();
+        }
+
+        /// <summary>
+        /// 设置小节号
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Button_Click_2(object sender, RoutedEventArgs e) {
+            List<string> selectedUnit = new List<string>();
+
+            int index = 1;
+            foreach(var item in unitSelector) {
+                if (item.IsChecked == true) {
+                    selectedUnit.Add(index.ToString());
+
+                    //还原
+                    item.IsChecked = false;
+                }
+
+                index++;
+            }
+
+            uiSetDuty.Text = new StringGroup(selectedUnit, ",").ToString();
         }
 
         #endregion

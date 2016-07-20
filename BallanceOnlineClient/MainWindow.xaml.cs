@@ -38,6 +38,11 @@ namespace BallanceOnlineClient {
                 Environment.Exit(1);
             }
 
+            if (Environment.GetCommandLineArgs().Length != 7) {
+                MessageBox.Show("命令行参数个数错误，无法运行");
+                Environment.Exit(1);
+            }
+
         }
         GlobalManager gm;
 
@@ -88,141 +93,146 @@ namespace BallanceOnlineClient {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private async void Button_Click(object sender, RoutedEventArgs e) {
+            gm.SetMonitor(mark, life, unit);
+            var newWin = new Login();
+            newWin.Show(gm);
 
-            //即将退出，先判定
-            if (willExit == true) {
-                gm.SetMonitor(mark, life, unit);
-                var newWin = new Login();
-                newWin.Show(gm);
+            this.Hide();
 
-                this.Hide();
-            }
+            ////即将退出，先判定
+            //if (willExit == true) {
+            //    gm.SetMonitor(mark, life, unit);
+            //    var newWin = new Login();
+            //    newWin.Show(gm);
 
-            long data;
-            try {
-                long.TryParse(uiData.Text, out data);
-            } catch (Exception ex) {
-                MessageBox.Show("输入数字格式错误");
-                uiData.Text = "";
-                return;
-            }
+            //    this.Hide();
+            //}
 
-            //显示
-            uiWait.Visibility = Visibility.Visible;
+            //long data;
+            //try {
+            //    long.TryParse(uiData.Text, out data);
+            //} catch (Exception ex) {
+            //    MessageBox.Show("输入数字格式错误");
+            //    uiData.Text = "";
+            //    return;
+            //}
 
-            if (inputTick == 0) {
+            ////显示
+            //uiWait.Visibility = Visibility.Visible;
 
-                switch (measureProgress) {
-                    case 0:
-                        //mark
-                        mark.StartSearching();
-                        mark.SearchedData = data;
-                        await mark.FirstSearchAsync();
+            //if (inputTick == 0) {
 
-                        uiTestStep.Text = "第" + (inputTick + 2).ToString() + "次查找：返回至游戏，等待2-3秒，再按下Esc键，将左下角分数填入下部文本框中，按确认键";
+            //    switch (measureProgress) {
+            //        case 0:
+            //            //mark
+            //            mark.StartSearching();
+            //            mark.SearchedData = data;
+            //            await mark.FirstSearchAsync();
 
-                        break;
-                    case 1:
-                        //life
-                        life.StartSearching();
-                        life.SearchedData = data;
-                        await life.FirstSearchAsync();
+            //            uiTestStep.Text = "第" + (inputTick + 2).ToString() + "次查找：返回至游戏，等待2-3秒，再按下Esc键，将左下角分数填入下部文本框中，按确认键";
 
-                        uiTestStep.Text = "第" + (inputTick + 2).ToString() + "次查找：返回至游戏，死亡一次，再按下Esc键，将右下角生命数填入下部文本框中，按确认键";
+            //            break;
+            //        case 1:
+            //            //life
+            //            life.StartSearching();
+            //            life.SearchedData = data;
+            //            await life.FirstSearchAsync();
 
-                        break;
-                    case 2:
-                        //unit
-                        unit.StartSearching();
-                        unit.SearchedData = data;
-                        await unit.FirstSearchAsync();
+            //            uiTestStep.Text = "第" + (inputTick + 2).ToString() + "次查找：返回至游戏，死亡一次，再按下Esc键，将右下角生命数填入下部文本框中，按确认键";
 
-                        uiTestStep.Text = "第" + (inputTick + 2).ToString() + "次查找：返回至游戏，按住前进键，通过一个存盘点后，立即再按下Esc键，将当前小节数数填入下部文本框中，按确认键。提示：当前小节数可能为：" +
-                            (inputTick + 2).ToString();
+            //            break;
+            //        case 2:
+            //            //unit
+            //            unit.StartSearching();
+            //            unit.SearchedData = data;
+            //            await unit.FirstSearchAsync();
 
-                        break;
-                }
+            //            uiTestStep.Text = "第" + (inputTick + 2).ToString() + "次查找：返回至游戏，按住前进键，通过一个存盘点后，立即再按下Esc键，将当前小节数数填入下部文本框中，按确认键。提示：当前小节数可能为：" +
+            //                (inputTick + 2).ToString();
 
-                inputTick += 1;
+            //            break;
+            //    }
 
-            } else {
+            //    inputTick += 1;
 
-                switch (measureProgress) {
-                    case 0:
-                        //mark
-                        mark.SearchedData = data;
-                        await mark.SearchAgainAsync();
+            //} else {
 
-                        if (mark.ResultCount <= 10) {
-                            //可以结束了
-                            inputTick = 0;
-                            measureProgress += 1;
-                            uiMarkMeasure.Background = new SolidColorBrush(Color.FromArgb(80, 0, 255, 0));
-                            uiTestStep.Text = "请直接输入右下角生命的个数到下部文本框中，按确认键";
-                        } else {
-                            uiTestStep.Text = "第" + (inputTick + 2).ToString() + "次查找：返回至游戏，等待2-3秒，再按下Esc键，将左下角分数填入下部文本框中，按确认键";
-                            inputTick += 1;
-                        }
+            //    switch (measureProgress) {
+            //        case 0:
+            //            //mark
+            //            mark.SearchedData = data;
+            //            await mark.SearchAgainAsync();
+
+            //            if (mark.ResultCount <= 10) {
+            //                //可以结束了
+            //                inputTick = 0;
+            //                measureProgress += 1;
+            //                uiMarkMeasure.Background = new SolidColorBrush(Color.FromArgb(80, 0, 255, 0));
+            //                uiTestStep.Text = "请直接输入右下角生命的个数到下部文本框中，按确认键";
+            //            } else {
+            //                uiTestStep.Text = "第" + (inputTick + 2).ToString() + "次查找：返回至游戏，等待2-3秒，再按下Esc键，将左下角分数填入下部文本框中，按确认键";
+            //                inputTick += 1;
+            //            }
 
 
-                        break;
-                    case 1:
-                        //life
-                        life.SearchedData = data;
-                        await life.SearchAgainAsync();
+            //            break;
+            //        case 1:
+            //            //life
+            //            life.SearchedData = data;
+            //            await life.SearchAgainAsync();
 
-                        if (inputTick == 2) {
-                            //超限了。。直接结束，后面用众数解决
-                            inputTick = 0;
-                            measureProgress += 1;
-                            uiLifeMeasure.Background = new SolidColorBrush(Color.FromArgb(80, 0, 255, 0));
-                            uiTestStep.Text = "请直接输入当前小节数到下部文本框中，按确认键。提示：当前小节数可能为：1";
-                            break;
-                        }
+            //            if (inputTick == 2) {
+            //                //超限了。。直接结束，后面用众数解决
+            //                inputTick = 0;
+            //                measureProgress += 1;
+            //                uiLifeMeasure.Background = new SolidColorBrush(Color.FromArgb(80, 0, 255, 0));
+            //                uiTestStep.Text = "请直接输入当前小节数到下部文本框中，按确认键。提示：当前小节数可能为：1";
+            //                break;
+            //            }
 
-                        if (life.ResultCount <= 10) {
-                            //可以结束了
-                            inputTick = 0;
-                            measureProgress += 1;
-                            uiLifeMeasure.Background = new SolidColorBrush(Color.FromArgb(80, 0, 255, 0));
-                            uiTestStep.Text = "请直接输入当前小节数到下部文本框中，按确认键。提示：当前小节数可能为：1";
-                        } else {
-                            uiTestStep.Text = "第" + (inputTick + 2).ToString() + "次查找：返回至游戏，死亡一次，再按下Esc键，将右下角生命数填入下部文本框中，按确认键";
-                            inputTick += 1;
-                        }
+            //            if (life.ResultCount <= 10) {
+            //                //可以结束了
+            //                inputTick = 0;
+            //                measureProgress += 1;
+            //                uiLifeMeasure.Background = new SolidColorBrush(Color.FromArgb(80, 0, 255, 0));
+            //                uiTestStep.Text = "请直接输入当前小节数到下部文本框中，按确认键。提示：当前小节数可能为：1";
+            //            } else {
+            //                uiTestStep.Text = "第" + (inputTick + 2).ToString() + "次查找：返回至游戏，死亡一次，再按下Esc键，将右下角生命数填入下部文本框中，按确认键";
+            //                inputTick += 1;
+            //            }
 
-                        break;
-                    case 2:
-                        //unit
-                        unit.SearchedData = data;
-                        await unit.SearchAgainAsync();
+            //            break;
+            //        case 2:
+            //            //unit
+            //            unit.SearchedData = data;
+            //            await unit.SearchAgainAsync();
 
-                        if (inputTick == 3) {
-                            //超限了。。直接结束，后面用众数解决
-                            uiUnitMeasure.Background = new SolidColorBrush(Color.FromArgb(80, 0, 255, 0));
-                            uiTestStep.Text = "请按Esc退出直至退出至初始菜单，退出完成后按下部确认键";
-                            willExit = true;
-                            break;
-                        }
+            //            if (inputTick == 3) {
+            //                //超限了。。直接结束，后面用众数解决
+            //                uiUnitMeasure.Background = new SolidColorBrush(Color.FromArgb(80, 0, 255, 0));
+            //                uiTestStep.Text = "请按Esc退出直至退出至初始菜单，退出完成后按下部确认键";
+            //                willExit = true;
+            //                break;
+            //            }
 
-                        if (life.ResultCount <= 10) {
-                            //可以结束了
-                            uiUnitMeasure.Background = new SolidColorBrush(Color.FromArgb(80, 0, 255, 0));
-                            uiTestStep.Text = "请按Esc退出直至推出至初始菜单，退出完成后按下部确认键";
-                            willExit = true;
-                        } else {
-                            uiTestStep.Text = "第" + (inputTick + 2).ToString() + "次查找：返回至游戏，按住前进键，通过一个存盘点后，立即再按下Esc键，将当前小节数数填入下部文本框中，按确认键。提示：当前小节数可能为：" +
-                            (inputTick + 2).ToString();
-                            inputTick += 1;
-                        }
+            //            if (life.ResultCount <= 10) {
+            //                //可以结束了
+            //                uiUnitMeasure.Background = new SolidColorBrush(Color.FromArgb(80, 0, 255, 0));
+            //                uiTestStep.Text = "请按Esc退出直至推出至初始菜单，退出完成后按下部确认键";
+            //                willExit = true;
+            //            } else {
+            //                uiTestStep.Text = "第" + (inputTick + 2).ToString() + "次查找：返回至游戏，按住前进键，通过一个存盘点后，立即再按下Esc键，将当前小节数数填入下部文本框中，按确认键。提示：当前小节数可能为：" +
+            //                (inputTick + 2).ToString();
+            //                inputTick += 1;
+            //            }
 
-                        break;
-                }
+            //            break;
+            //    }
 
-            }
+            //}
 
-            uiData.Text = "";
-            uiWait.Visibility = Visibility.Collapsed;
+            //uiData.Text = "";
+            //uiWait.Visibility = Visibility.Collapsed;
 
         }
     }

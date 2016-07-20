@@ -107,10 +107,13 @@ namespace BallanceOnlineClient {
         }
 
         public void turnToNewWindow() {
-            var newWin = new LoadResources();
-            newWin.Show(gm);
+            this.Dispatcher.Invoke(() => {
+                var newWin = new LoadResources();
+                newWin.Show(gm);
 
-            this.Close();
+                this.Close();
+            });
+
         }
 
         /// <summary>
@@ -119,9 +122,10 @@ namespace BallanceOnlineClient {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void uiConnect_Click(object sender, RoutedEventArgs e) {
-            if (uiMsg.Text != "")
+            if (uiMsg.Text != "") {
                 gm.dataGiveIn.SendData(CombineAndSplitSign.Combine(BallanceOnline.Const.ClientAndServerSign.Client, BallanceOnline.Const.SocketSign.Message, uiMsg.Text));
-            else MessageBox.Show("发送的消息不能为空");
+                uiMsg.Text = "";
+            } else MessageBox.Show("发送的消息不能为空");
         }
 
         /// <summary>
