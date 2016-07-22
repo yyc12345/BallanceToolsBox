@@ -60,6 +60,9 @@ namespace BallanceOnlineServer.DataProcess {
                 }
             }
 
+            fr.Close();
+            fr.Dispose();
+
         }
 
     }
